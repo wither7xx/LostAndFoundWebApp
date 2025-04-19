@@ -1,0 +1,86 @@
+SET FOREIGN_KEY_CHECKS=0;
+
+DROP TABLE IF EXISTS `Users` CASCADE
+;
+
+DROP TABLE IF EXISTS `Items` CASCADE
+;
+
+DROP TABLE IF EXISTS `Images` CASCADE
+;
+
+DROP TABLE IF EXISTS `Claims` CASCADE
+;
+
+CREATE TABLE `Users`
+(
+	`UserID` INT NOT NULL,
+	`Email` VARCHAR(100) NOT NULL,
+	`Password` VARCHAR(255) NOT NULL,
+	`Name` VARCHAR(50) NOT NULL,
+	`Role` ENUM('User', 'Admin') NOT NULL,
+	`IsValid` BOOL NOT NULL DEFAULT 1,
+	CONSTRAINT `PK_Users` PRIMARY KEY (`UserID`)
+)
+;
+
+CREATE TABLE `Items`
+(
+	`ItemID` INT NOT NULL,
+	`Name` VARCHAR(100) NOT NULL,
+	`Location` VARCHAR(50) NOT NULL,
+	`Campus` VARCHAR(50) NOT NULL,
+	`Time` DATETIME(0) NOT NULL,
+	`Description` TEXT NOT NULL,
+	`ContactInfo` VARCHAR(100) NOT NULL,
+	`Status` ENUM('Lost', 'Found') NOT NULL,
+	`IsValid` BOOL NOT NULL DEFAULT 1,
+	`Category` VARCHAR(50) NOT NULL,
+	`UserID` INT NOT NULL,
+	CONSTRAINT `PK_Items` PRIMARY KEY (`ItemID`)
+)
+;
+
+CREATE TABLE `Images`
+(
+	`ImageID` INT NOT NULL,
+	`ImagePath` VARCHAR(255) NOT NULL,
+	`ItemID` INT NOT NULL,
+	CONSTRAINT `PK_Images` PRIMARY KEY (`ImageID`)
+)
+;
+
+CREATE TABLE `Claims`
+(
+	`ClaimID` INT NOT NULL,
+	`ClaimDescription` TEXT NOT NULL,
+	`ProofDocPath` VARCHAR(255) NOT NULL,
+	`Status` ENUM('Pending', 'Approved', 'Rejected') NOT NULL,
+	`CreateTime` DATETIME(0) NOT NULL,
+	`ItemID` INT NOT NULL,
+	`UserID` INT NOT NULL,
+	CONSTRAINT `PK_Claims` PRIMARY KEY (`ClaimID`)
+)
+;
+
+ALTER TABLE `Items` 
+ ADD CONSTRAINT `FK_Items_Users`
+	FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE `Images` 
+ ADD CONSTRAINT `FK_Images_Items`
+	FOREIGN KEY (`ItemID`) REFERENCES `Items` (`ItemID`) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE `Claims` 
+ ADD CONSTRAINT `FK_Claims_Items`
+	FOREIGN KEY (`ItemID`) REFERENCES `Items` (`ItemID`) ON DELETE No Action ON UPDATE No Action
+;
+
+ALTER TABLE `Claims` 
+ ADD CONSTRAINT `FK_Claims_Users`
+	FOREIGN KEY (`UserID`) REFERENCES `Users` (`UserID`) ON DELETE No Action ON UPDATE No Action
+;
+
+SET FOREIGN_KEY_CHECKS=1;
