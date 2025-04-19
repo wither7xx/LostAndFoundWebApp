@@ -1,0 +1,13 @@
+﻿@page
+@model LostAndFoundWebApp.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<h2>登录</h2>
+
+<form method="post">
+    <label for="email">电子邮箱：</label>
+    <input type="email" id="email" name="email" required />
+    <button type="submit">发送登录链接</button>
+</form>

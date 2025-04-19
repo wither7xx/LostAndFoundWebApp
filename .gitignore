@@ -1,0 +1,6 @@
+# Build results
+[Bb]in/
+[Oo]bj/
+
+# Visual Studio 2022 cache/options directory
+.vs/
