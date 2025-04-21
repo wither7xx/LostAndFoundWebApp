@@ -30,6 +30,7 @@ public partial class LostAndFoundContext : DbContext
             var configuration = new ConfigurationBuilder()
                 .SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
                 .AddJsonFile("appsettings.json")
+                .AddUserSecrets<Program>()
                 .Build();
 
             var connectionString = configuration.GetConnectionString("LostAndFoundDatabase");
