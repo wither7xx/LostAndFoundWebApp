@@ -1,8 +1,7 @@
 ﻿using System.Net.Mail;
 using System.Net;
-using LostAndFoundWebApp.Controllers.Email;
 
-namespace LostAndFoundWebApp.Controllers.Email
+namespace LostAndFoundWebApp.Services.Email
 {
     public class EmailSender : IEmailSender
     {

@@ -1,4 +1,4 @@
-using LostAndFoundWebApp.Controllers.Email;
+using LostAndFoundWebApp.Services.Email;
 
 var builder = WebApplication.CreateBuilder(args);
 

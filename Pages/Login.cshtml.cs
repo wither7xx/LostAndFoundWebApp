@@ -1,4 +1,4 @@
-using LostAndFoundWebApp.Controllers.Email;
+using LostAndFoundWebApp.Services.Email;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
