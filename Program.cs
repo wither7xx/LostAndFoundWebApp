@@ -1,4 +1,6 @@
+using LostAndFoundWebApp.Models;
 using LostAndFoundWebApp.Services.Email;
+using LostAndFoundWebApp.Services.Mysql;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,7 +18,16 @@ if (!app.Environment.IsDevelopment())
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
+if (DatabaseOperate.TestConnection())
+{
+    Console.WriteLine("数据库连接成功！");
 
+}
+else
+{
+    Console.WriteLine("数据库连接失败！");
+
+}
 app.UseHttpsRedirection();
 
 app.UseRouting();
