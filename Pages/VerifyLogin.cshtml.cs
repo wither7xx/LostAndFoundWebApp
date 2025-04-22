@@ -1,21 +1,28 @@
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Memory;
+using System.Security.Claims;
 
 namespace LostAndFoundWebApp.Pages
 {
-    public class VerifyLoginModel : PageModel
+    public class VerifyLoginModel(IMemoryCache memoryCache) : PageModel
     {
+        private readonly IMemoryCache _memoryCache = memoryCache;
         public IActionResult OnGet(string token)
         {
-            // 验证 token（实验项目中可以简单存储 token 或直接通过 URL 验证）
-            if (string.IsNullOrEmpty(token))
+            if (_memoryCache.TryGetValue(token, out string? email) && email != null)
             {
-                return BadRequest("登录链接无效");
+                // 鍒犻櫎缂撳瓨涓殑浠ょ墝
+                _memoryCache.Remove(token);
+
+                // TODO:鍒涘缓鐢ㄦ埛浼氳瘽
+
+                return RedirectToPage("/Index");
             }
 
-            // 模拟登录成功
-            //return Content("登录成功！");
-            return RedirectToPage("/Index");
+            return RedirectToPage("/Login");
         }
     }
 }

@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
-
+builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 var app = builder.Build();
@@ -20,12 +20,12 @@ if (!app.Environment.IsDevelopment())
 }
 if (DatabaseOperate.TestConnection())
 {
-    Console.WriteLine("数据库连接成功！");
+    Console.WriteLine("鏁版嵁搴撹繛鎺ユ垚鍔燂紒");
 
 }
 else
 {
-    Console.WriteLine("数据库连接失败！");
+    Console.WriteLine("鏁版嵁搴撹繛鎺ュけ璐ワ紒");
 
 }
 app.UseHttpsRedirection();

@@ -1,12 +1,14 @@
 using LostAndFoundWebApp.Services.Email;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.Extensions.Caching.Memory;
 
 namespace LostAndFoundWebApp.Pages
 {
-    public class LoginModel(IEmailSender emailSender) : PageModel
+    public class LoginModel(IEmailSender emailSender, IMemoryCache memoryCache) : PageModel
     {
         private readonly IEmailSender _emailSender = emailSender;
+        private readonly IMemoryCache _memoryCache = memoryCache;
 
         [BindProperty]
         public string Email { get; set; } = string.Empty;
@@ -21,17 +23,21 @@ namespace LostAndFoundWebApp.Pages
             {
                 return Page();
             }
-
-            // Éú³ÉµÇÂ¼Á´½Ó
+            // ç”Ÿæˆç™»å½•ä»¤ç‰Œ
             var loginToken = Guid.NewGuid().ToString();
+            // å­˜å‚¨ä»¤ç‰Œå’Œè¿‡æœŸæ—¶é—´
+            var tokenExpiry = DateTime.UtcNow.AddMinutes(15);
+            _memoryCache.Set(loginToken, Email, tokenExpiry - DateTime.UtcNow);
+
+            // ç”Ÿæˆç™»å½•é“¾æ¥
             var loginLink = Url.Page(
                 "/VerifyLogin",
                 pageHandler: null,
                 values: new { token = loginToken },
                 protocol: Request.Scheme);
 
-            // ·¢ËÍÓÊ¼ş
-            await _emailSender.SendEmailAsync(Email, "µÇÂ¼Á´½Ó", $"µã»÷¼´¿ÉµÇÂ¼£º{loginLink}");
+            // å‘é€é‚®ä»¶
+            await _emailSender.SendEmailAsync(Email, "ç™»å½•é“¾æ¥", $"ç‚¹å‡»å³å¯ç™»å½•ï¼š{loginLink}");
 
             return RedirectToPage("/LoginConfirmation");
         }
