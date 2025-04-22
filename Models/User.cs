@@ -21,3 +21,13 @@ public partial class User
 
     public virtual ICollection<Item> Items { get; set; } = new List<Item>();
 }
+
+public static class UserMetadata
+{
+    public static class Role
+    {
+        public const string User = "User";
+        public const string Admin = "Admin";
+        public const string DefaultRole = User;
+    };
+}

@@ -23,3 +23,14 @@ public partial class Claim
 
     public virtual User User { get; set; } = null!;
 }
+
+public static class ClaimMetadata
+{
+    public static class Status
+    {
+        public const string Pending = "Pending";
+        public const string Approved = "Approved";
+        public const string Rejected = "Rejected";
+        public const string DefaultStatus = Pending;
+    };
+}

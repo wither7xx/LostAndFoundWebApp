@@ -33,3 +33,42 @@ public partial class Item
 
     public virtual User User { get; set; } = null!;
 }
+
+public static class ItemMetadata
+{
+    public static class Status
+    {
+        public const string Lost = "Lost";
+        public const string Found = "Found";
+        public const string DefaultStatus = Lost;
+    };
+    public static class Campus
+    {
+        public const string Unknown = "未知";
+        public const string DefaultCampus = Unknown;
+        public readonly static string[] CampusList = [
+            Unknown,
+            "前卫南区",
+            "南岭校区",
+            "南湖校区",
+            "新民校区",
+            "朝阳校区",
+            "和平校区",
+            "前卫北区"
+        ];
+    };
+    public static class Category
+    {
+        public const string Unknown = "未分类";
+        public const string DefaultCategory = Unknown;
+        public readonly static string[] CategoryList = [
+            Unknown,
+            "证件类",
+            "电子产品类",
+            "饰品类",
+            "书籍类",
+            "衣物类",
+            "其他类"
+        ];
+    };
+}
