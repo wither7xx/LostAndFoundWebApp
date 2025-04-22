@@ -63,7 +63,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 获取单个失物信息
-        public static Item GetItem(int ItemId)
+        public static Item? GetItem(int ItemId)
         {
             const string sql = "SELECT * FROM Items WHERE ItemID = @ItemID";
 
@@ -82,14 +82,14 @@ namespace LostAndFoundWebApp.Services.Mysql
                             return new Item
                             {
                                 ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
-                                Name = reader["Name"] != DBNull.Value ? reader["Name"].ToString() : string.Empty,
-                                Location = reader["Location"] != DBNull.Value ? reader["Location"].ToString() : null,
-                                Campus = reader["Campus"] != DBNull.Value ? reader["Campus"].ToString() : null,
+                                Name = reader["Name"] != DBNull.Value ? (reader["Name"].ToString() ?? string.Empty) : string.Empty,
+                                Location = reader["Location"] != DBNull.Value ? (reader["Location"].ToString() ?? string.Empty) : string.Empty,
+                                Campus = reader["Campus"] != DBNull.Value ? (reader["Campus"].ToString() ?? string.Empty) : string.Empty,
                                 Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
-                                Description = reader["Description"] != DBNull.Value ? reader["Description"].ToString() : null,
-                                ContactInfo = reader["ContactInfo"] != DBNull.Value ? reader["ContactInfo"].ToString() : null,
-                                Status = reader["Status"] != DBNull.Value ? reader["Status"].ToString() : "Unknown",
-                                Category = reader["Category"] != DBNull.Value ? reader["Category"].ToString() : "General",
+                                Description = reader["Description"] != DBNull.Value ? (reader["Description"].ToString() ?? string.Empty) : string.Empty,
+                                ContactInfo = reader["ContactInfo"] != DBNull.Value ? (reader["ContactInfo"].ToString() ?? string.Empty) : string.Empty,
+                                Status = reader["Status"] != DBNull.Value ? (reader["Status"].ToString() ?? ItemMetadata.Status.DefaultStatus) : ItemMetadata.Status.DefaultStatus,
+                                Category = reader["Category"] != DBNull.Value ? (reader["Category"].ToString() ?? ItemMetadata.Category.DefaultCategory) : ItemMetadata.Category.DefaultCategory,
                                 UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
                                 IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
                             };
@@ -107,7 +107,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 更新失物状态
-        public static bool UpdateItem(int ItemId,string Status)
+        public static bool UpdateItem(int ItemId, string Status)
         {
             const string sql = @"UPDATE Items SET 
                             Status = @Status
@@ -182,7 +182,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 获取单个图片记录
-        public static Image GetImage(int imageId)
+        public static Image? GetImage(int imageId)
         {
             const string sql = "SELECT * FROM Images WHERE ImageId = @ImageId";
 
@@ -201,7 +201,7 @@ namespace LostAndFoundWebApp.Services.Mysql
                             return new Image
                             {
                                 ImageId = reader["ImageId"] != DBNull.Value ? Convert.ToInt32(reader["ImageId"]) : 0,
-                                ImagePath = reader["ImagePath"] != DBNull.Value ? reader["ImagePath"].ToString() : null,
+                                ImagePath = reader["ImagePath"] != DBNull.Value ? (reader["ImagePath"].ToString() ?? string.Empty) : string.Empty,
                                 ItemId = reader["ItemId"] != DBNull.Value ? Convert.ToInt32(reader["ItemId"]) : 0
                             };
                         }
@@ -283,7 +283,7 @@ namespace LostAndFoundWebApp.Services.Mysql
                             images.Add(new Image
                             {
                                 ImageId = Convert.ToInt32(reader["ImageId"]),
-                                ImagePath = reader["ImagePath"].ToString(),
+                                ImagePath = reader["ImagePath"].ToString() ?? string.Empty,
                                 ItemId = Convert.ToInt32(reader["ItemId"])
                             });
                         }
@@ -377,7 +377,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 获取单个认领记录
-        public static Claim GetClaim(int claimId)
+        public static Claim? GetClaim(int claimId)
         {
             const string sql = "SELECT * FROM Claims WHERE ClaimId = @ClaimId";
 
@@ -396,9 +396,9 @@ namespace LostAndFoundWebApp.Services.Mysql
                             return new Claim
                             {
                                 ClaimId = reader["ClaimId"] != DBNull.Value ? Convert.ToInt32(reader["ClaimId"]) : 0,
-                                ClaimDescription = reader["ClaimDescription"] != DBNull.Value ? reader["ClaimDescription"].ToString() : "",
-                                ProofDocPath = reader["ProofDocPath"] != DBNull.Value ? reader["ProofDocPath"].ToString() : "",
-                                Status = reader["Status"] != DBNull.Value ? reader["Status"].ToString() : "Pending",
+                                ClaimDescription = reader["ClaimDescription"] != DBNull.Value ? (reader["ClaimDescription"].ToString() ?? string.Empty) : string.Empty,
+                                ProofDocPath = reader["ProofDocPath"] != DBNull.Value ? (reader["ProofDocPath"].ToString() ?? string.Empty) : string.Empty,
+                                Status = reader["Status"] != DBNull.Value ? (reader["Status"].ToString() ?? ClaimMetadata.Status.DefaultStatus) : ClaimMetadata.Status.DefaultStatus,
                                 CreateTime = reader["CreateTime"] != DBNull.Value ? Convert.ToDateTime(reader["CreateTime"]) : DateTime.MinValue,
                                 ItemId = reader["ItemId"] != DBNull.Value ? Convert.ToInt32(reader["ItemId"]) : 0,
                                 UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : 0
@@ -435,9 +435,9 @@ namespace LostAndFoundWebApp.Services.Mysql
                             claims.Add(new Claim
                             {
                                 ClaimId = Convert.ToInt32(reader["ClaimId"]),
-                                ClaimDescription = reader["ClaimDescription"].ToString(),
-                                ProofDocPath = reader["ProofDocPath"].ToString(),
-                                Status = reader["Status"].ToString(),
+                                ClaimDescription = reader["ClaimDescription"].ToString() ?? string.Empty,
+                                ProofDocPath = reader["ProofDocPath"].ToString() ?? string.Empty,
+                                Status = reader["Status"].ToString() ?? ClaimMetadata.Status.DefaultStatus,
                                 CreateTime = Convert.ToDateTime(reader["CreateTime"]),
                                 ItemId = Convert.ToInt32(reader["ItemId"]),
                                 UserId = Convert.ToInt32(reader["UserId"])
@@ -541,7 +541,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 根据ID获取用户
-        public static User GetUserById(int userId)
+        public static User? GetUserById(int userId)
         {
             const string sql = "SELECT * FROM Users WHERE UserId = @UserId";
 
@@ -560,10 +560,10 @@ namespace LostAndFoundWebApp.Services.Mysql
                             return new User
                             {
                                 UserId = Convert.ToInt32(reader["UserId"]),
-                                Email = reader["Email"].ToString(),
-                                Password = reader["Password"].ToString(),
-                                Name = reader["Name"].ToString(),
-                                Role = reader["Role"].ToString(),
+                                Email = reader["Email"].ToString() ?? string.Empty,
+                                Password = reader["Password"].ToString() ?? string.Empty,
+                                Name = reader["Name"].ToString() ?? string.Empty,
+                                Role = reader["Role"].ToString() ?? UserMetadata.Role.DefaultRole,
                                 IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : null
                             };
                         }
@@ -579,7 +579,7 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 根据邮箱获取用户
-        public static User GetUserByEmail(string email)
+        public static User? GetUserByEmail(string email)
         {
             const string sql = "SELECT * FROM Users WHERE Email = @Email";
 
@@ -598,10 +598,10 @@ namespace LostAndFoundWebApp.Services.Mysql
                             return new User
                             {
                                 UserId = Convert.ToInt32(reader["UserId"]),
-                                Email = reader["Email"].ToString(),
-                                Password = reader["Password"].ToString(),
-                                Name = reader["Name"].ToString(),
-                                Role = reader["Role"].ToString(),
+                                Email = reader["Email"].ToString() ?? string.Empty,
+                                Password = reader["Password"].ToString() ?? string.Empty,
+                                Name = reader["Name"].ToString() ?? string.Empty,
+                                Role = reader["Role"].ToString() ?? UserMetadata.Role.DefaultRole,
                                 IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : null
                             };
                         }
