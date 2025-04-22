@@ -14,7 +14,8 @@ namespace LostAndFoundWebApp.Pages
             }
 
             // 模拟登录成功
-            return Content("登录成功！");
+            //return Content("登录成功！");
+            return RedirectToPage("/Index");
         }
     }
 }

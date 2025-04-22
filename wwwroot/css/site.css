@@ -34,14 +34,35 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
+.navbar-brand {
+    font-weight: bold; /* 设置字体加粗 */
+    margin-right: 50px; /* 设置右侧间距 */
+}
+.nav-item {
+    margin-right: 50px; /* 设置右侧间距 */
+}
+    .nav-item:last-child {
+        margin-right: 0; /* 最后一个元素不需要右侧间距 */
+    }
+.nav-link{
+    color: #808080; /* 默认字体颜色为灰色 */
+    text-decoration: none; /* 去掉下划线 */
+}
 
-
-
+    /* 鼠标悬停时字体颜色变为黑色 */
+    .nav-link:hover {
+        color: black; /* 鼠标悬停时字体颜色变为黑色 */
+    }
+/* 当前激活的导航项字体颜色为蓝色 */
+.nav-link-active {
+    color: black; /* 当前激活的导航项字体颜色为黑色 */
+}
+/*登录页面*/
 .login-container {
     background: rgba(173, 216, 230, 0.1);
     padding: 40px;
-    border-radius: 8px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
     margin: 0 auto; /* ???????? */
     position: absolute;
@@ -63,7 +84,7 @@ body {
 
     .form-group input {
         width: 100%;
-        padding: 15px;
+        padding: 10px;
         border: 1px solid #ccc;
         border-radius: 4px;
         font-size: 20px;
@@ -71,7 +92,7 @@ body {
 
 .btn {
     width: 100%;
-    padding: 15px;
+    padding: 10px;
     background-color: #007bff;
     color: white;
     border: none;

@@ -2,7 +2,221 @@
 @model PrivacyModel
 @{
     ViewData["Title"] = "Privacy Policy";
+    Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
 }
-<h1>@ViewData["Title"]</h1>
+ <!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>隐私政策 - 失物招领系统</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.0/font/bootstrap-icons.css">
+    <style>
+        :root {
+            --primary-color: #4361ee;
+            --secondary-color: #3f37c9;
+            --text-color: #495057;
+            --light-bg: #f8f9fa;
+        }
 
-<p>Use this page to detail your site's privacy policy.</p>
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        .privacy-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+        }
+
+        .privacy-header {
+            text-align: center;
+            margin-bottom: 3rem;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 1.5rem;
+        }
+
+        .privacy-header h1 {
+            color: var(--primary-color);
+            font-weight: 700;
+            margin-bottom: 1rem;
+        }
+
+        .privacy-header p {
+            font-size: 1.1rem;
+            opacity: 0.8;
+        }
+
+        .privacy-section {
+            margin-bottom: 2.5rem;
+        }
+
+        .privacy-section h2 {
+            color: var(--secondary-color);
+            font-weight: 600;
+            margin-bottom: 1.2rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .privacy-section h2 i {
+            margin-right: 12px;
+            font-size: 1.4rem;
+        }
+
+        .privacy-section p {
+            margin-bottom: 1rem;
+            font-size: 1.05rem;
+        }
+
+        .contact-card {
+            background: var(--light-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            margin-top: 1rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .contact-item i {
+            color: var(--primary-color);
+            font-size: 1.2rem;
+            margin-right: 12px;
+            width: 24px;
+            text-align: center;
+        }
+
+        media (max-width: 768px) {
+            .privacy-container {
+                margin: 1rem;
+                padding: 1.5rem;
+            }
+
+            .privacy-header {
+                margin-bottom: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="privacy-container">
+        <div class="privacy-header">
+            <h1>隐私政策</h1>
+            <p>最后更新于 2025年4月22日 | 版本 v2.1</p>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-file-earmark-text"></i>政策声明</h2>
+            <p>本隐私政策详细说明了失物招领系统（以下简称"我们"或"本平台"）如何收集、使用、存储和保护您的个人信息。请您在使用我们的服务前仔细阅读本政策。</p>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-collection"></i>信息收集与使用</h2>
+            <p>我们可能收集以下类型的个人信息以提供和改进我们的服务：</p>
+            <ul class="list-group list-group-flush mb-3">
+                <li class="list-group-item bg-transparent">• <strong>身份信息</strong>：姓名</li>
+                <li class="list-group-item bg-transparent">• <strong>联系信息</strong>：电子邮件地址、电话号码</li>
+                <li class="list-group-item bg-transparent">• <strong>设备信息</strong>：IP地址、浏览器类型、操作系统版本</li>
+                <li class="list-group-item bg-transparent">• <strong>使用数据</strong>：访问时间、页面浏览记录、操作日志</li>
+            </ul>
+            <p>收集的信息将用于：账户注册、服务提供、安全验证、数据分析及服务优化等合法合规用途。</p>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-shield-lock"></i>数据安全</h2>
+            <p>我们采用行业标准的安全措施保护您的信息：</p>
+            <div class="row g-3 mb-3">
+                <div class="col-md-6">
+                    <div class="p-3 border rounded">
+                        <h5 class="d-flex align-items-center"><i class="bi bi-encryption me-2"></i>加密传输</h5>
+                        <p class="mb-0">所有数据传输均使用TLS 1.2+加密协议</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="p-3 border rounded">
+                        <h5 class="d-flex align-items-center"><i class="bi bi-database-lock me-2"></i>存储安全</h5>
+                        <p class="mb-0">敏感信息采用AES-256加密存储</p>
+                    </div>
+                </div>
+            </div>
+            <p>我们定期进行安全审计和漏洞扫描，并限制员工访问权限，确保数据安全。</p>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-diagram-3"></i>数据共享</h2>
+            <p>我们承诺不会出售您的个人信息。仅在以下情况可能共享数据：</p>
+            <div class="alert alert-light mb-3">
+                <div class="d-flex">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <div>应法律要求或响应司法程序</div>
+                </div>
+                <div class="d-flex mt-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <div>为保护用户或公众安全</div>
+                </div>
+                <div class="d-flex mt-2">
+                    <i class="bi bi-check-circle-fill text-success me-2"></i>
+                    <div>与授权服务提供商合作（需签订保密协议）</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-link-45deg"></i>第三方服务</h2>
+            <p>本平台可能包含第三方网站的链接，这些服务有独立的隐私政策。建议您阅读：</p>
+            <div class="row g-2 mb-3">
+                <div class="col-auto">
+                    <span class="badge bg-light text-dark">Google Analytics</span>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-light text-dark">支付网关</span>
+                </div>
+                <div class="col-auto">
+                    <span class="badge bg-light text-dark">地图服务</span>
+                </div>
+            </div>
+            <p>我们对第三方服务的内容、隐私政策或行为不承担任何责任。</p>
+        </div>
+
+        <div class="privacy-section">
+            <h2><i class="bi bi-headset"></i>联系我们</h2>
+            <p>如对隐私政策有任何疑问或需要行使您的数据权利，请通过以下方式联系我们的数据保护官：</p>
+            <div class="contact-card">
+                <div class="contact-item">
+                    <i class="bi bi-envelope"></i>
+                    <div>privacy@lostandfound.example.com</div>
+                </div>
+                <div class="contact-item">
+                    <i class="bi bi-telephone"></i>
+                    <div>400-888-xxxx（工作日 9:00-18:00）</div>
+                </div>
+                <div class="contact-item">
+                    <i class="bi bi-geo-alt"></i>
+                    <div>吉林大学前卫南区 2699号</div>
+                </div>
+            </div>
+            <p class="mt-3 small text-muted">我们将在收到请求后15个工作日内回复。</p>
+        </div>
+
+        <div class="alert alert-info mt-4">
+            <i class="bi bi-info-circle me-2"></i>
+            本政策可能随业务发展更新，请定期查看。继续使用服务即表示您接受修订后的政策。
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+
+
+
