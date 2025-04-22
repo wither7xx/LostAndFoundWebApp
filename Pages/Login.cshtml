@@ -2,12 +2,18 @@
 @model LostAndFoundWebApp.Pages.LoginModel
 @{
     ViewData["Title"] = "Login";
+    Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
 }
 
-<h2>登录</h2>
-
-<form method="post">
-    <label for="email">电子邮箱：</label>
-    <input type="email" id="email" name="email" required />
-    <button type="submit">发送登录链接</button>
-</form>
+<div class="login-container">
+    <h2 style="font-size: 30px;">登录</h2>
+    <form method="post" id="login-form">
+        <div class="form-group">
+            <input type="email" id="email" name="email" required placeholder="请输入您的邮箱">
+        </div>
+        <div class="form-group">
+            <button type="submit" class="btn">发送登录链接</button>
+        </div>
+    </form>
+    <p class="text-center">欢迎使用失物招领系统！</p>
+</div>
