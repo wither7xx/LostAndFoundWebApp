@@ -60,18 +60,18 @@ body {
 
 
 
-/*登录页面*/
+/*****************************       登录页面       *******************/
 .login-container {
     background: rgba(173, 216, 230, 0.1);
     padding: 40px;
     border-radius: 20px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
-    margin: 0 auto; /* ???????? */
+    margin: 0 auto; 
     position: absolute;
     top: 50%;
     left: 50%;
-    transform: translate(-50%, -50%); /* ???±???? */
+    transform: translate(-50%, -50%);
     text-align: center;
 }
 
@@ -115,7 +115,7 @@ body {
     margin-top: 15px;
     margin-bottom: 3px
 }
-/*loginconfirmation*/
+/********************************        loginconfirmation        ****************/
 .loginconfirmation-container {
     background-color: #f4f4f4;
     padding: 20px;
@@ -133,3 +133,104 @@ h2 {
 p {
     color: #666;
 }
+.allcontainer {
+    background-color: #f0f0f0;
+}
+/*********************************     主页     *********************************/
+.index-container {
+    font-family: Arial, sans-serif;
+    background-color: #f0f0f0;
+    margin: 0;
+    padding: 1px;
+}
+
+
+.search-section {
+    padding: 20px;
+    background-color: #fff;
+    margin: 40px;
+    margin-top: 20px;
+    margin-bottom: 10px;
+    border-radius: 20px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+    .search-section form {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+
+    .search-section input, .search-section select {
+        margin: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        font-size: 16px;
+        border-color: #f0f0f0;
+        box-shadow: none;
+    }
+
+    .search-section button {
+        margin: 5px;
+        padding: 5px;
+        border-radius: 10px;
+        font-size: 16px;
+        border-color: white;
+        box-shadow: none; /* 去除阴影效果 */
+        background-color: #4CAF50;
+        color: white;
+        cursor: pointer;
+    }
+
+button:hover {
+    background-color: #45a049;
+}
+
+.lost-found-list {
+    padding: 20px;
+    background-color: #fff;
+    margin: 40px;
+    margin-top: 0px;
+    border-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.scroll-container {
+    width: 100%;
+    height: 300px;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    position: relative;
+}
+
+.scroll-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+    position: absolute;
+    top: 0;
+    left: 0;
+    animation: scroll 10s linear infinite;
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateY(0);
+    }
+
+    100% {
+        transform: translateY(-100%);
+    }
+}
+
+.scroll-list li {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+    .scroll-list li:last-child {
+        border-bottom: none;
+    }
