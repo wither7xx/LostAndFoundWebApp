@@ -53,10 +53,13 @@ body {
     .nav-link:hover {
         color: black; /* 鼠标悬停时字体颜色变为黑色 */
     }
-/* 当前激活的导航项字体颜色为蓝色 */
+/* 当前激活的导航项字体颜色为灰色 */
 .nav-link-active {
     color: black; /* 当前激活的导航项字体颜色为黑色 */
 }
+
+
+
 /*登录页面*/
 .login-container {
     background: rgba(173, 216, 230, 0.1);
@@ -111,4 +114,22 @@ body {
     text-align: center;
     margin-top: 15px;
     margin-bottom: 3px
+}
+/*loginconfirmation*/
+.loginconfirmation-container {
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    max-width: 400px;
+    margin: 50px auto;
+}
+
+h2 {
+    color: #0056b3;
+}
+
+p {
+    color: #666;
 }
