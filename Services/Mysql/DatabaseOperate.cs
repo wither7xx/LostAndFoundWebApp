@@ -62,6 +62,48 @@ namespace LostAndFoundWebApp.Services.Mysql
             }
         }
 
+        // 获取物品列表
+        public static List<Item> GetAllItems()
+        {
+            var items = new List<Item>();
+            const string sql = "SELECT * FROM Items";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new Item
+                            {
+                                ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
+                                Name = reader["Name"]?.ToString() ?? string.Empty,
+                                Location = reader["Location"]?.ToString() ?? string.Empty,
+                                Campus = reader["Campus"]?.ToString() ?? string.Empty,
+                                Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
+                                Description = reader["Description"]?.ToString() ?? string.Empty,
+                                ContactInfo = reader["ContactInfo"]?.ToString() ?? string.Empty,
+                                Status = reader["Status"]?.ToString() ?? ItemMetadata.Status.DefaultStatus,
+                                Category = reader["Category"]?.ToString() ?? ItemMetadata.Category.DefaultCategory,
+                                UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
+                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"获取物品列表失败: {ex.Message}");
+                }
+            }
+
+            return items;
+        }
+
         // 获取单个失物信息
         public static Item? GetItem(int ItemId)
         {

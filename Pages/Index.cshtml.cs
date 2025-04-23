@@ -1,3 +1,4 @@
+using LostAndFoundWebApp.Services.Mysql;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
@@ -12,9 +13,11 @@ namespace LostAndFoundWebApp.Pages
             _logger = logger;
         }
 
-        public void OnGet()
+        public IActionResult OnGetItems()
         {
-
+            // 从数据库获取所有物品数据
+            var items = DatabaseOperate.GetAllItems(); // 假设已实现此方法
+            return new JsonResult(items);
         }
     }
 }
