@@ -1,6 +1,7 @@
 using LostAndFoundWebApp.Models;
 using LostAndFoundWebApp.Services.Email;
 using LostAndFoundWebApp.Services.Mysql;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -8,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login"; // 未认证时跳转的页面
+        options.LogoutPath = "/Logout"; // 登出时跳转的页面
+        options.AccessDeniedPath = "/AccessDenied"; // 无权限访问时跳转的页面
+    });
 
 var app = builder.Build();
 
@@ -32,6 +40,8 @@ app.UseHttpsRedirection();
 
 app.UseRouting();
 
+app.UseAuthentication(); // 启用身份认证
+
 app.UseAuthorization();
 
 app.MapStaticAssets();
@@ -39,3 +49,4 @@ app.MapRazorPages()
    .WithStaticAssets();
 
 app.Run();
+
