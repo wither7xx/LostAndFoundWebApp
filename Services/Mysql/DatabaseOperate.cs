@@ -456,6 +456,45 @@ namespace LostAndFoundWebApp.Services.Mysql
                 }
             }
         }
+
+        // 获取认领申请列表
+        public static List<Claim> GetAllClaims()
+        {
+            var items = new List<Claim>();
+            const string sql = "SELECT * FROM Claims";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new Claim
+                            {
+                                ClaimId = Convert.ToInt32(reader["ClaimId"]),
+                                ClaimDescription = reader["ClaimDescription"].ToString() ?? string.Empty,
+                                ProofDocPath = reader["ProofDocPath"].ToString() ?? string.Empty,
+                                Status = reader["Status"].ToString() ?? ClaimMetadata.Status.DefaultStatus,
+                                CreateTime = Convert.ToDateTime(reader["CreateTime"]),
+                                ItemId = Convert.ToInt32(reader["ItemId"]),
+                                UserId = Convert.ToInt32(reader["UserId"])
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"获取物品列表失败: {ex.Message}");
+                }
+            }
+
+            return items;
+        }
+
         // 获取某物品的所有认领记录
         public static List<Claim> GetClaimsByItem(int itemId)
         {
