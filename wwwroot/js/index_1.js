@@ -23,7 +23,16 @@
         itemList.innerHTML = '';
         filteredItems.forEach(item => {
             const li = document.createElement('li');
-            li.textContent = `${item.name} - ${item.status} - ${item.date} - ${item.campus}`;
+            const campusMap = {
+                campus1: '前卫南区',
+                campus2: '南岭校区',
+                campus3: '和平校区',
+                campus4: '朝阳校区',
+                campus5: '新民校区',
+                campus6: '南湖校区'
+            };
+
+            li.textContent = `${item.name} - ${item.status} -${item.location} - ${item.description} - ${item.contactInfo} - ${item.category}-  ${item.time} - ${campusMap[item.campus]}`;
             itemList.appendChild(li);
         });
     }
@@ -32,30 +41,44 @@
     fetchItems();
 
     // 搜索功能
-    searchForm.addEventListener('submit', (e) => {
+    searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
-        const name = document.getElementById('searchName').value.toLowerCase();
-        const status = document.getElementById('searchStatus').value;
-        const startDate = document.getElementById('searchStartDate').value;
-        const endDate = document.getElementById('searchEndDate').value;
-        const campus = document.getElementById('searchCampus').value;
-        const validity = document.getElementById('searchValidity').value;
-        const category = document.getElementById('searchCategory').value;
-
-        fetchItems().then(items => {
-            const filteredItems = items.filter(item => {
-                return (
-                    (!name || item.name.toLowerCase().includes(name)) &&
-                    (!status || item.status === status) &&
-                    (!startDate || item.date >= startDate) &&
-                    (!endDate || item.date <= endDate) &&
-                    (!campus || item.campus === campus) &&
-                    (!validity || item.validity === validity) &&
-                    (!category || item.category === category)
-                );
+        const searchParams = {
+            name: document.getElementById('searchName').value.trim() || null,
+            status: document.getElementById('searchStatus').value || null,
+            startDate: document.getElementById('searchStartDate').value
+                ? new Date(document.getElementById('searchStartDate').value).toISOString()
+                : null,
+            endDate: document.getElementById('searchEndDate').value
+                ? new Date(document.getElementById('searchEndDate').value).toISOString()
+                : null,
+            campus: document.getElementById('searchCampus').value || null,
+            isValid: document.getElementById('searchValidity').value === 'valid'
+                ? 1
+                : (document.getElementById('searchValidity').value === 'invalid' ? 0 : null),
+            category: document.getElementById('searchCategory').value || null
+        };
+        console.log('最终参数:', JSON.stringify(searchParams, null, 2));
+        try {
+            // 调用后端API
+            const response = await fetch('/Index?handler=Search', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(searchParams)
             });
 
-            displayItems(filteredItems);
-        })
+            if (!response.ok) {
+                throw new Error(`请求失败: ${response.status}`);
+            }
+
+            const items = await response.json();
+            displayItems(items);
+
+        } catch (error) {
+            console.error('搜索错误:', error);
+            showErrorToast('搜索失败，请稍后重试');  // 显示错误提示
+        }
     });
 });
