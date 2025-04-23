@@ -1,4 +1,5 @@
 using LostAndFoundWebApp.Services.Email;
+using LostAndFoundWebApp.Services.Mysql;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Caching.Memory;
@@ -23,6 +24,15 @@ namespace LostAndFoundWebApp.Pages
             {
                 return Page();
             }
+
+            // 检查邮箱对应的用户是否有效
+            var user = DatabaseOperate.GetUserByEmail(Email);
+            if (user != null && !(user.IsValid ?? false))
+            {
+                TempData["ErrorMessage"] = "该账号已失效或已被封禁。";
+                return RedirectToPage("/Index");
+            }
+
             // 生成登录令牌
             var loginToken = Guid.NewGuid().ToString();
             // 存储令牌和过期时间

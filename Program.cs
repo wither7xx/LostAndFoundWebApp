@@ -1,12 +1,20 @@
 using LostAndFoundWebApp.Models;
 using LostAndFoundWebApp.Services.Email;
 using LostAndFoundWebApp.Services.Mysql;
+using Microsoft.AspNetCore.Authentication.Cookies;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddMemoryCache();
+builder.Services.AddSession();
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie(options =>
+    {
+        options.LoginPath = "/Login";
+        options.LogoutPath = "/Logout";
+    });
 builder.Services.AddSingleton<IEmailSender, EmailSender>();
 
 var app = builder.Build();
@@ -37,5 +45,8 @@ app.UseAuthorization();
 app.MapStaticAssets();
 app.MapRazorPages()
    .WithStaticAssets();
+
+app.UseSession();
+app.UseAuthentication();
 
 app.Run();
