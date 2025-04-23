@@ -2,12 +2,7 @@
     const itemList = document.getElementById('itemList');
     const searchForm = document.getElementById('searchForm');
 
-    //// 模拟的失物招领数据
-    const mockItems = [
-        { id: 1, name: '钱包', location: '图书馆', status: 'lost', date: '2025-04-18', campus: 'campus1', validity: 'valid', category: 'documents', contact: '1234567890' },
-        { id: 2, name: '手机', location: '食堂', status: 'found', date: '2025-04-17', campus: 'campus2', validity: 'valid', category: 'electronics', contact: '0987654321' },
-        // 更多数据...
-    ];
+
 
     // 从后端获取物品数据
     async function fetchItems() {
