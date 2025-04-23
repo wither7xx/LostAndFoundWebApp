@@ -18,7 +18,7 @@ namespace LostAndFoundWebApp.Pages.Admin
         {
             if (data == null || data.UserId == null)
             {
-                return BadRequest("ÎŞĞ§µÄÇëÇóÊı¾İ");
+                return BadRequest("æ— æ•ˆçš„è¯·æ±‚æ•°æ®");
             }
 
             int userId = data.UserId.Value;
@@ -28,11 +28,11 @@ namespace LostAndFoundWebApp.Pages.Admin
                 user.IsValid = !(user.IsValid ?? false);
                 DatabaseOperate.UpdateUser(user);
 
-                // ·µ»Ø¸üĞÂºóµÄ×´Ì¬
+                // è¿”å›æ›´æ–°åçš„çŠ¶æ€
                 return new JsonResult(new { isValid = user.IsValid });
             }
 
-            return BadRequest("ÓÃ»§²»´æÔÚ");
+            return BadRequest("ç”¨æˆ·ä¸å­˜åœ¨");
         }
 
         public class ToggleRequest
