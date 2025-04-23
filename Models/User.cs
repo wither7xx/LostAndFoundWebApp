@@ -30,8 +30,4 @@ public static class UserMetadata
         public const string Admin = "Admin";
         public const string DefaultRole = User;
     };
-    public static class Password
-    {
-        public const string PasswordPlaceholder = "000000";
-    };
 }

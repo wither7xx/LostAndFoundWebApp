@@ -1,77 +1,83 @@
 ﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-	<meta charset="utf-8" />
-	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-	<title>@ViewData["Title"] - LostAndFoundWebApp</title>
-	<script type="importmap"></script>
-	<link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-	<link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-	<link rel="stylesheet" href="~/LostAndFoundWebApp.styles.css" asp-append-version="true" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - LostAndFoundWebApp</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/LostAndFoundWebApp.styles.css" asp-append-version="true" />
 </head>
 <body>
-	<header>
-		<nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
-			<div class="container">
-				<a class="navbar-brand" asp-area="" asp-page="/Index">失物招领系统</a>
-				<button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-						aria-expanded="false" aria-label="Toggle navigation">
-					<span class="navbar-toggler-icon"></span>
-				</button>
-				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-					<ul class="navbar-nav flex-grow-1">
-						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Index">
-								<img src="/images/index.png" alt="Home Icon" width="24" height="24">主页
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/RegisterItems" ? "nav-link-active" : "")" asp-area="" asp-page="/RegisterItems">
-								<img src="/images/register.png" alt="Register Icon" width="24" height="24">登记物品
-							</a>
-						</li>
-						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/ClaimApplication" ? "nav-link-active" : "")" asp-area="" asp-page="/ClaimApplication">
-								<img src="/images/claim.png" alt="Claim Icon" width="24" height="24">认领申请
-							</a>
-						</li>
-					</ul>
-					<ul class="navbar-nav">
-						@if (User.Identity?.IsAuthenticated ?? false)
-						{
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Logout">
-									<img src="\images\login.png" alt="Logout Icon" width="24" height="24">退出登录 </a>
-							</li>
-						}
-						else
-						{
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Login">
-								<img src="\images\login.png" alt="Login Icon" width="24" height="24">登录 </a>
-							</li>
-						}
-					</ul>
-				</div>
-			</div>
-		</nav>
-	</header>
-	<div class="allcontainer">
-		<main role="main" class="pb-3">
-			@RenderBody()
-		</main>
-	</div>
+    <header>
+        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+            <div class="container">
+                <a class="navbar-brand" asp-area="" asp-page="/Index">失物招领系统</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                    <ul class="navbar-nav flex-grow-1">
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Index">
+            <img src="/images/index.png" alt="Home Icon" width="24" height="24">主页
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/RegisterItems" ? "nav-link-active" : "")" asp-area="" asp-page="/RegisterItems">
+            <img src="/images/register.png" alt="Register Icon" width="24" height="24">登记物品
+        </a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/ClaimApplication" ? "nav-link-active" : "")" asp-area="" asp-page="/ClaimApplication">
+            <img src="/images/claim.png" alt="Claim Icon" width="24" height="24">认领申请
+        </a>
+    </li>
+</ul>
+                    <ul class="navbar-nav">
+                        @if (User.Identity.IsAuthenticated)
+                        {
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="/images/user.png" alt="User Icon" width="24" height="24"> @User.Identity.Name
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Profile">个人信息</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-page="/Logout">登出</a></li>
+                                </ul>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-page="/Login">
+                                    <img src="/images/login.png" alt="Login Icon" width="24" height="24"> 登录
+                                </a>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <div class="allcontainer">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
 
-	<footer class="border-top footer text-muted">
-		<div class="container">
-			2025 - LostAndFoundWebApp - 关于我们 -<a asp-area="" asp-page="/Privacy">隐私政策</a>
-		</div>
-	</footer>
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            2025 - LostAndFoundWebApp - 关于我们 -<a asp-area="" asp-page="/Privacy">隐私政策</a>
+        </div>
+    </footer>
 
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
 
-	@await RenderSectionAsync("Scripts", required: false)
+    @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

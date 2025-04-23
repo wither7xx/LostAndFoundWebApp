@@ -6,12 +6,6 @@
 }
 
 <div class="index-container">
-    @if (TempData["ErrorMessage"] != null)
-    {
-        <div class="alert alert-danger">
-            @TempData["ErrorMessage"]
-        </div>
-    }
     <section class="search-section">
         <form id="searchForm">
             <input type="text" id="searchName" placeholder="物品名称">
