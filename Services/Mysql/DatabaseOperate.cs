@@ -1,6 +1,7 @@
 ﻿using LostAndFoundWebApp.Models;
 using MySql.Data.MySqlClient;
 using System.Configuration;
+using System.Text;
 
 namespace LostAndFoundWebApp.Services.Mysql
 {
@@ -104,6 +105,91 @@ namespace LostAndFoundWebApp.Services.Mysql
             return items;
         }
 
+        public static List<Item> SearchItems(ItemSearchParams searchParams)
+        {
+            var items = new List<Item>();
+            var sql = new StringBuilder("SELECT * FROM Items WHERE 1=1");
+            var parameters = new List<MySqlParameter>();
+
+            // 动态构建查询条件
+            if (!string.IsNullOrWhiteSpace(searchParams.Name))
+            {
+                sql.Append(" AND LOWER(Name) LIKE LOWER(@Name)");
+                parameters.Add(new MySqlParameter("@Name", $"%{searchParams.Name.Trim()}%"));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchParams.Status))
+            {
+                sql.Append(" AND Status = @Status");
+                parameters.Add(new MySqlParameter("@Status", searchParams.Status));
+            }
+
+            if (searchParams.StartDate.HasValue && searchParams.EndDate.HasValue)
+            {
+                sql.Append(" AND Time BETWEEN @StartDate AND @EndDate");
+                parameters.Add(new MySqlParameter("@StartDate", searchParams.StartDate));
+                parameters.Add(new MySqlParameter("@EndDate", searchParams.EndDate));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchParams.Campus))
+            {
+                sql.Append(" AND Campus = @Campus");
+                parameters.Add(new MySqlParameter("@Campus", searchParams.Campus));
+            }
+
+            if (searchParams.IsValid.HasValue)
+            {
+                sql.Append(" AND IsValid = @IsValid");
+                parameters.Add(new MySqlParameter("@IsValid", searchParams.IsValid.Value));
+            }
+
+            if (!string.IsNullOrWhiteSpace(searchParams.Category))
+            {
+                sql.Append(" AND Category = @Category");
+                parameters.Add(new MySqlParameter("@Category", searchParams.Category));
+            }
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql.ToString(), conn))
+            {
+                cmd.Parameters.AddRange(parameters.ToArray());
+
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new Item
+                            {
+                                // 保持原有映射逻辑
+                                ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
+                                Name = reader["Name"]?.ToString() ?? string.Empty,
+                                Location = reader["Location"]?.ToString() ?? string.Empty,
+                                Campus = reader["Campus"]?.ToString() ?? string.Empty,
+                                Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
+                                Description = reader["Description"]?.ToString() ?? string.Empty,
+                                ContactInfo = reader["ContactInfo"]?.ToString() ?? string.Empty,
+                                Status = reader["Status"]?.ToString() ?? ItemMetadata.Status.DefaultStatus,
+                                Category = reader["Category"]?.ToString() ?? ItemMetadata.Category.DefaultCategory,
+                                UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
+                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    // 建议使用日志框架记录错误
+                    Console.WriteLine($"搜索失败: {ex.Message}");
+                }
+            }
+
+            return items;
+        }
+
         // 获取单个失物信息
         public static Item? GetItem(int ItemId)
         {
@@ -149,17 +235,17 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 更新失物状态
-        public static bool UpdateItem(int ItemId, string Status)
+        public static bool UpdateItem(int ItemId, bool IsValid)
         {
             const string sql = @"UPDATE Items SET 
-                            Status = @Status
+                            IsValid = @IsValid
                             WHERE ItemID = @ItemID";
 
             using (MySqlConnection conn = new MySqlConnection(connectionString))
             using (MySqlCommand cmd = new MySqlCommand(sql, conn))
             {
                 cmd.Parameters.AddWithValue("@ItemID", ItemId);
-                cmd.Parameters.AddWithValue("@Status", Status);
+                cmd.Parameters.AddWithValue("@IsValid", IsValid);
 
                 try
                 {
