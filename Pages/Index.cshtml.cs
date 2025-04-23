@@ -16,7 +16,7 @@ namespace LostAndFoundWebApp.Pages
         public IActionResult OnGetItems()
         {
             // 从数据库获取所有物品数据
-            var items = DatabaseOperate.GetAllItems(); // 假设已实现此方法
+            var items = DatabaseOperate.GetAllItems();
             return new JsonResult(items);
         }
     }

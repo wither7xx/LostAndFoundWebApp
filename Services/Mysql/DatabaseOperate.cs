@@ -582,6 +582,43 @@ namespace LostAndFoundWebApp.Services.Mysql
             }
         }
 
+        // 获取所有用户
+        public static List<User> GetAllUsers()
+        {
+            var users = new List<User>();
+            const string sql = "SELECT * FROM Users";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            users.Add(new User
+                            {
+                                UserId = Convert.ToInt32(reader["UserId"]),
+                                Email = reader["Email"].ToString() ?? string.Empty,
+                                Password = reader["Password"].ToString() ?? string.Empty,
+                                Name = reader["Name"].ToString() ?? string.Empty,
+                                Role = reader["Role"].ToString() ?? UserMetadata.Role.DefaultRole,
+                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : null
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"获取用户列表失败: {ex.Message}");
+                }
+            }
+
+            return users;
+        }
+
         // 根据ID获取用户
         public static User? GetUserById(int userId)
         {

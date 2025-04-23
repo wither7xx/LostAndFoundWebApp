@@ -1,0 +1,12 @@
+﻿@page
+@model LostAndFoundWebApp.Pages.Admin.IndexModel
+@{
+    ViewData["Title"] = "管理员主页";
+}
+
+<h1>管理员主页</h1>
+<ul>
+    <li><a asp-page="/Admin/ManageUsers">用户管理</a></li>
+    <li><a asp-page="/Admin/ManageItems">物品管理</a></li>
+    <li><a asp-page="/Admin/ManageClaims">认领申请管理</a></li>
+</ul>

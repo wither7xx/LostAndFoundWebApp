@@ -21,35 +21,42 @@
 				<div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
 					<ul class="navbar-nav flex-grow-1">
 						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Index">
+							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Index">
 								<img src="/images/index.png" alt="Home Icon" width="24" height="24">主页
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/RegisterItems" ? "nav-link-active" : "")" asp-area="" asp-page="/RegisterItems">
+							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/RegisterItems" ? "nav-link-active" : "")" asp-area="" asp-page="/RegisterItems">
 								<img src="/images/register.png" alt="Register Icon" width="24" height="24">登记物品
 							</a>
 						</li>
 						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"].ToString() == "/ClaimApplication" ? "nav-link-active" : "")" asp-area="" asp-page="/ClaimApplication">
+							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/ClaimApplication" ? "nav-link-active" : "")" asp-area="" asp-page="/ClaimApplication">
 								<img src="/images/claim.png" alt="Claim Icon" width="24" height="24">认领申请
 							</a>
 						</li>
+						<!-- 实际使用时，取消注释掉下面的判断语句 -->
+						@* @if (User.IsInRole("Admin")) *@
+						@* { *@
+								<li class="nav-item">
+									<a class="nav-link" asp-area="" asp-page="/Admin/Index">管理员</a>
+								</li>
+						@* } *@
 					</ul>
 					<ul class="navbar-nav">
 						@if (User.Identity?.IsAuthenticated ?? false)
 						{
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Logout">
-									<img src="\images\login.png" alt="Logout Icon" width="24" height="24">退出登录 </a>
-							</li>
+								<li class="nav-item">
+									<a class="nav-link" asp-area="" asp-page="/Logout">
+										<img src="\images\login.png" alt="Logout Icon" width="24" height="24">退出登录 </a>
+								</li>
 						}
 						else
 						{
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Login">
-								<img src="\images\login.png" alt="Login Icon" width="24" height="24">登录 </a>
-							</li>
+								<li class="nav-item">
+									<a class="nav-link" asp-area="" asp-page="/Login">
+									<img src="\images\login.png" alt="Login Icon" width="24" height="24">登录 </a>
+								</li>
 						}
 					</ul>
 				</div>
