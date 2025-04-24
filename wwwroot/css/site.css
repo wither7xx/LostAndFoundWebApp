@@ -57,9 +57,25 @@ body {
 .nav-link-active {
     color: black; /* 当前激活的导航项字体颜色为黑色 */
 }
+html, body {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+}
 
+.allcontainer {
+    height: calc(100vh - 60px); /* 100%视口高度减去导航栏的高度 */
+    padding: 20px;
+    overflow: auto;
+    background-color: #f0f0f0;
+}
 
-
+.navbar {
+    height: 60px; /* 设置导航栏的高度 */
+}
+    .navbar.navbar-expand-sm.navbar-toggleable-sm.navbar-light.bg-white.border-bottom.box-shadow.mb-3 {
+        margin: 0 !important; /* 使用 !important 确保优先级最高 */
+    }
 /*****************************       登录页面       *******************/
 .login-container {
     background: rgba(173, 216, 230, 0.1);
@@ -67,7 +83,7 @@ body {
     border-radius: 20px;
     box-shadow: 0 10px 10px rgba(0, 0, 0, 0.1);
     width: 350px;
-    margin: 0 auto; 
+    margin: 0 auto;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -133,9 +149,7 @@ h2 {
 p {
     color: #666;
 }
-.allcontainer {
-    background-color: #f0f0f0;
-}
+
 /*********************************     主页     *********************************/
 .index-container {
     font-family: Arial, sans-serif;

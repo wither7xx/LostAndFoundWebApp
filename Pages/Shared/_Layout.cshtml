@@ -38,9 +38,25 @@
 						<!-- 实际使用时，取消注释掉下面的判断语句 -->
 						@* @if (User.IsInRole(LostAndFoundWebApp.Models.UserMetadata.Role.Admin))
 						{ *@
-							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Admin/Index">管理员</a>
-							</li>
+							<li class="nav-item dropdown">
+	<a class="nav-link dropdown-toggle @(ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/ManageUsers" || 
+                                      ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/ManageItems" || 
+                                      ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/ManageClaims" ? "nav-link-active" : "")" 
+	   href="#" 
+	   id="navbarDropdown" 
+	   role="button" 
+	   data-bs-toggle="dropdown" 
+	   aria-expanded="false">
+		<img src="/images/administrators.png" alt="Admin Icon" width="24" height="24">管理员
+	</a>
+	<ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+		<li><a class="dropdown-item" asp-area="" asp-page="/Admin/ManageUsers">用户管理</a></li>
+		<div class="dropdown-divider"></div> <!-- 添加横线分隔 -->
+		<li><a class="dropdown-item" asp-area="" asp-page="/Admin/ManageItems">物品管理</a></li>
+		<div class="dropdown-divider"></div> <!-- 添加横线分隔 -->
+		<li><a class="dropdown-item" asp-area="" asp-page="/Admin/ManageClaims">认领申请管理</a></li>
+	</ul>
+</li>
 						@* } *@
 					</ul>
 					<ul class="navbar-nav">
