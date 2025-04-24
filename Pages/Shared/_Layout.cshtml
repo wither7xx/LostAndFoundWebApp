@@ -39,7 +39,8 @@
 						@* @if (User.IsInRole(LostAndFoundWebApp.Models.UserMetadata.Role.Admin))
 						{ *@
 							<li class="nav-item">
-								<a class="nav-link" asp-area="" asp-page="/Admin/Index">管理员</a>
+								<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Admin/Index">
+									<img src="/images/administrators.png" alt="Claim Icon" width="24" height="24">管理员</a>
 							</li>
 						@* } *@
 					</ul>
