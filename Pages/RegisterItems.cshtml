@@ -1,75 +1,155 @@
 ﻿@page
 @model LostAndFoundWebApp.Pages.RegisterItemsModel
-@{//登记物品
+@{
     ViewData["Title"] = "登记物品";
-    Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
-<h1>登记物品</h1>
 
-<form method="post" enctype="multipart/form-data">
-    <div>
-        <label for="Name">物品名称</label>
-        <input type="text" id="Name" name="Name" required />
+<style>
+    .page-container {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
+
+    .form-container {
+        background-color: white;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        font-weight: bold;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="datetime-local"],
+    .form-group select,
+    .form-group textarea {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-group textarea {
+        min-height: 100px;
+    }
+
+    .submit-button {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+    .submit-button button {
+        background-color: #28a745;
+        color: white;
+        border: none;
+        padding: 1rem 3rem;
+        font-size: 1.1rem;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .submit-button button:hover {
+        background-color: #218838;
+    }
+</style>
+
+<div class="page-container">
+    <div class="form-container">
+        <h1 class="form-title">登记物品</h1>
+
+        <form method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="Name">物品名称</label>
+                <input type="text" id="Name" name="Name" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Status">丢失物品/拾获物品？</label>
+                <select id="Status" name="Status" required>
+                    <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Lost">丢失物品</option>
+                    <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Found">拾获物品</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Location">丢失/拾获地点</label>
+                <input type="text" id="Location" name="Location" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Campus">校区</label>
+                <select id="Campus" name="Campus" required>
+                    <option value="campus1">前卫南区</option>
+                    <option value="campus2">南岭校区</option>
+                    <option value="campus3">和平校区</option>
+                    <option value="campus4">朝阳校区</option>
+                    <option value="campus5">新民校区</option>
+                    <option value="campus6">南湖校区</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Time">丢失/拾获时间</label>
+                <input type="datetime-local" id="Time" name="Time" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Description">描述</label>
+                <textarea id="Description" name="Description" required></textarea>
+            </div>
+
+            <div class="form-group">
+                <label for="ContactInfo">联系方式</label>
+                <input type="text" id="ContactInfo" name="ContactInfo" required />
+            </div>
+
+            <div class="form-group">
+                <label for="Category">类别</label>
+                <select id="Category" name="Category" required>
+                    <option value="electronics">电子设备</option>
+                    <option value="documents">文件/书籍</option>
+                    <option value="dailyitems">生活用品</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="Images">上传图片 (最多5张)</label>
+                <input type="file" id="Images" name="Images" accept="image/*" multiple />
+            </div>
+
+            <div class="submit-button">
+                <button type="submit">提交</button>
+            </div>
+        </form>
     </div>
-    <div>
-        <label for="Status">丢失物品/拾获物品？</label>
-        <select id="Status" name="Status" required>
-            <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Lost">丢失物品</option>
-            <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Found">拾获物品</option>
-        </select>
-    </div>
-    <div>
-        <label for="Location">丢失/拾获地点</label>
-        <input type="text" id="Location" name="Location" required />
-    </div>
-    <div>
-        <label for="Campus">校区</label>
-        <select id="Campus" name="Campus" required>
-            <option value="campus1">前卫南区</option>
-            <option value="campus2">南岭校区</option>
-            <option value="campus3">和平校区</option>
-            <option value="campus4">朝阳校区</option>
-            <option value="campus5">新民校区</option>
-            <option value="campus6">南湖校区</option>
-        </select>
-    </div>
-    <div>
-        <label for="Time">丢失/拾获时间</label>
-        <input type="datetime-local" id="Time" name="Time" required />
-    </div>
-    <div>
-        <label for="Description">描述</label>
-        <textarea id="Description" name="Description" required></textarea>
-    </div>
-    <div>
-        <label for="ContactInfo">联系方式</label>
-        <input type="text" id="ContactInfo" name="ContactInfo" required />
-    </div>
-    <div>
-        <label for="Category">类别</label>
-        <select id="Category" name="Category" required>
-            <option value="electronics">电子设备</option>
-            <option value="documents">文件/书籍</option>
-            <option value="dailyitems">生活用品</option>
-        </select>
-    </div>
-    <div>
-        <label for="Images">上传图片 (最多5张)</label>
-        <input type="file" id="Images" name="Images" accept="image/*" multiple />
-    </div>
-    <div class="form-group">
-        <button type="submit">提交</button>
-	</div>
-</form>
+</div>
 
 @section Scripts {
     <script>
-    document.getElementById('Images').addEventListener('change', function(event) {
-        const files = event.target.files;
-        if (files.length > 5) {
-            alert('最多只能上传5张图片');
-            event.target.value = '';
-        }
-    });
+        document.getElementById('Images').addEventListener('change', function(event) {
+            const files = event.target.files;
+            if (files.length > 5) {
+                alert('最多只能上传5张图片');
+                event.target.value = '';
+            }
+        });
     </script>
 }
