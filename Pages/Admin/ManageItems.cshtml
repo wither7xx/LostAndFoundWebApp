@@ -26,26 +26,26 @@
                 <td>@item.Name</td>
                 <td>@item.Location</td>
                 <td id="itemStatus-@item.ItemId">
-                @if (item.Status == LostAndFoundWebApp.Models.ItemMetadata.Status.Lost)
-                {
-                    @((item.IsValid == true) ? "待找回" : "已找回")
-                }
-                else if (item.Status == LostAndFoundWebApp.Models.ItemMetadata.Status.Found)
-                {
-                    @((item.IsValid == true) ? "待认领" : "已认领")
-                }
+                    @if (item.Status == LostAndFoundWebApp.Models.ItemMetadata.Status.Lost)
+                    {
+                        @((item.IsValid == true) ? "待找回" : "已找回")
+                    }
+                    else if (item.Status == LostAndFoundWebApp.Models.ItemMetadata.Status.Found)
+                    {
+                        @((item.IsValid == true) ? "待认领" : "已认领")
+                    }
                 </td>
                 <td>
-                @if (item.IsValid == true)
-                {
-                    <button class="btn btn-sm btn-primary toggle-status-btn" data-item-id="@item.ItemId">
-                        标记为已处理
-                    </button>
-                }
-                else
-                {
-                    <button class="btn btn-sm btn-secondary" disabled>已处理</button>
-                }
+                    @if (item.IsValid == true)
+                    {
+                        <button class="btn btn-sm btn-primary toggle-status-btn" data-item-id="@item.ItemId">
+                            标记为已处理
+                        </button>
+                    }
+                    else
+                    {
+                        <button class="btn btn-sm btn-secondary" disabled>已处理</button>
+                    }
                 </td>
             </tr>
             <tr id="imageRow-@item.ItemId" class="image-row" style="display: none;">
