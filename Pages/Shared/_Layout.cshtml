@@ -36,27 +36,27 @@
 							</a>
 						</li>
 						<!-- 实际使用时，取消注释掉下面的判断语句 -->
-						 @*@if (User.IsInRole("Admin")) *@
-						 @*{*@ 
-								<li class="nav-item">
-									<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Admin/Index">管理员</a>
-								</li>
-						 @*}*@ 
+						@* @if (User.IsInRole(LostAndFoundWebApp.Models.UserMetadata.Role.Admin))
+						{ *@
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-page="/Admin/Index">管理员</a>
+							</li>
+						@* } *@
 					</ul>
 					<ul class="navbar-nav">
 						@if (User.Identity?.IsAuthenticated ?? false)
 						{
-								<li class="nav-item">
-									<a class="nav-link" asp-area="" asp-page="/Logout">
-										<img src="\images\login.png" alt="Logout Icon" width="24" height="24">退出登录 </a>
-								</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-page="/Logout">
+									<img src="\images\login.png" alt="Logout Icon" width="24" height="24">退出登录 </a>
+							</li>
 						}
 						else
 						{
-								<li class="nav-item">
-									<a class="nav-link" asp-area="" asp-page="/Login">
-									<img src="\images\login.png" alt="Login Icon" width="24" height="24">登录 </a>
-								</li>
+							<li class="nav-item">
+								<a class="nav-link" asp-area="" asp-page="/Login">
+								<img src="\images\login.png" alt="Login Icon" width="24" height="24">登录 </a>
+							</li>
 						}
 					</ul>
 				</div>
