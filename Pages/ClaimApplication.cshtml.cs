@@ -14,7 +14,7 @@ namespace LostAndFoundWebApp.Pages
         private readonly IWebHostEnvironment _environment = environment;
 
         [BindProperty]
-        public LostAndFoundWebApp.Models.Claim Claim { get; set; } = null;
+        public LostAndFoundWebApp.Models.Claim? Claim { get; set; }
 
         public void OnGet()
         {
@@ -27,12 +27,31 @@ namespace LostAndFoundWebApp.Pages
         }
 
 
-        public async Task<IActionResult> OnPostAsync(IFormFile proofFile)
+        public IActionResult OnPost(IFormFile proofFile)
         {
             // 手动验证文件字段（绕过自动验证）
             if (proofFile == null || proofFile.Length == 0)
             {
                 ModelState.AddModelError("proofFile", "必须上传证明文件");
+                return Page();
+            }
+
+            if (Claim == null)
+            {
+                ModelState.AddModelError("Claim", "认领申请初始化失败");
+                return Page();
+            }
+
+            int userID;
+            try
+            {
+                var userIDClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                userID = int.Parse(userIDClaim ?? string.Empty);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "无法获取当前用户信息，请重新登录。";
+                return RedirectToPage("/Index");
             }
 
             // 提前处理文件上传
@@ -44,33 +63,24 @@ namespace LostAndFoundWebApp.Pages
                 Directory.CreateDirectory(uploadPath);
             }
             var guid = Guid.NewGuid();
-            var imageIdx = 0;
-            var image = proofFile;
-          
-           
-            string fileName = $"{guid}-{imageIdx}{Path.GetExtension(image.FileName)}";
-            imageIdx++;
+            var proofFileIdx = 0;
+
+
+            string fileName = $"{guid}-{proofFileIdx}{Path.GetExtension(proofFile.FileName)}";
+
             string filePath = Path.Combine(uploadPath, fileName);
 
-             using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    image.CopyTo(stream);
-                }
+            using (var stream = new FileStream(filePath, FileMode.Create))
+            {
+                proofFile.CopyTo(stream);
+            }
 
-            Claim.ProofDocPath = $"/uploads/images/{fileName}";
+            Claim.ProofDocPath = $"/uploads/claims/{fileName}";
             Console.WriteLine(Claim.ProofDocPath);
 
             // 设置用户ID（确保已授权）
-            try
-            {
-                var userIDClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
-                Claim.UserId = int.Parse(userIDClaim ?? string.Empty);
-            }
-            catch (Exception)
-            {
-                TempData["ErrorMessage"] = "无法获取当前用户信息，请重新登录。";
-                return RedirectToPage("/Index");
-            }
+            Claim.UserId = userID;
+
             // 手动验证其他字段
             if (Claim.ItemId <= 0)
             {
@@ -83,7 +93,7 @@ namespace LostAndFoundWebApp.Pages
                 ModelState.AddModelError("Claim.ItemId", "物品ID不存在");
                 return Page();
             }
-           
+
 
             // 数据库操作
             try
