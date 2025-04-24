@@ -41,16 +41,54 @@
                 <option value="electronics">电子设备</option>
                 <option value="documents">文件/书籍</option>
                 <option value="dailyitems">生活用品</option>
+                <option value="dailyitems">学术用品</option>
+                <option value="dailyitems">衣物</option>
+                <option value="dailyitems">贵重物品</option>
             </select>
             <button type="submit">搜索</button>
         </form>
     </section>
     <section class="lost-found-list">
-        <div class="scroll-container">
-            <ul class="scroll-list" id="itemList">
-                <!-- 物品列表将通过JavaScript动态填充 -->
-            </ul>
+    <div class="scroll-container">
+        <table class="data-table">
+            <thead>
+                <tr>
+                    <th>物品名称</th>
+                    <th>状态</th>
+                    <th>类别</th>
+                    <th>时间</th>
+                    <th>地点</th>
+                    <th>校区</th>
+                    <th>是否有效</th>
+                    <th>操作</th>
+                </tr>
+            </thead>
+            <tbody id="itemList"></tbody>
+        </table>
+    </div>
+
+    <!-- 分页控件 -->
+    <div class="pagination-controls">
+        <div class="page-size">
+            <select id="pageSize">
+                <option value="10">10条/页</option>
+                <option value="20">20条/页</option>
+                <option value="50">50条/页</option>
+            </select>
         </div>
-    </section>
+        <div class="page-numbers" id="pageNumbers"></div>
+    </div>
+
+    <!-- 详情模态框 -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal" id="detailModal">
+        <div class="modal-content">
+            <h3>物品详情</h3>
+            <div id="modalContent"></div>
+            <button class="close-btn">关闭</button>
+        </div>
+    </div>
+</section>
+
     <script src="js/index_1.js"></script>
 </div>

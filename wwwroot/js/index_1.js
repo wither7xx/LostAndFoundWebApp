@@ -18,12 +18,16 @@
         }
     }
 
+
+
     // 动态填充物品列表
     function displayItems(filteredItems = mockItems) {
+        const itemList = document.getElementById('itemList');
         itemList.innerHTML = '';
+
         filteredItems.forEach(item => {
-            const li = document.createElement('li');
-            const campusMap = {
+            const row = document.createElement('tr');
+            const campusMap1 = {
                 campus1: '前卫南区',
                 campus2: '南岭校区',
                 campus3: '和平校区',
@@ -31,11 +35,45 @@
                 campus5: '新民校区',
                 campus6: '南湖校区'
             };
+            const campusMap2 = {
+                electronics: '电子设备',
+                documents: '文档/书籍',
+                dailyitems: '生活用品',
+                academic: '学术用品',
+                clothing: '衣物',
+                valuables:'贵重物品'
+            };
 
-            li.textContent = `${item.name} - ${item.status} -${item.location} - ${item.description} - ${item.contactInfo} - ${item.category}-  ${item.time} - ${campusMap[item.campus]}`;
-            itemList.appendChild(li);
+            // 在模板字符串中为操作列预留空<td>
+            row.innerHTML = `
+            <td>${item.itemId}-${item.name}</td>
+            <td>${item.status}</td>
+            <td>${campusMap2[item.category]}</td>
+            <td>${item.time}</td>
+            <td>${item.location}</td>
+            <td>${campusMap1[item.campus]}</td>
+            <td>${item.isValid ? '是' : '否'}</td>
+            <td></td>
+        `;
+
+            // 找到最后一个td（操作列）
+            const actionTd = row.querySelector('td:last-child');
+
+            // 创建并添加按钮
+            const button = document.createElement('button');
+            button.textContent = '查看';
+            button.backgroundColor = 'green';
+            button.addEventListener('click', () => handleAction(item.itemId));  // 改用闭包绑定
+            actionTd.appendChild(button);
+
+            itemList.appendChild(row);
         });
     }
+
+    // 全局挂载操作函数
+    window.handleAction = function (itemId) {
+        console.log('操作项目ID:', itemId);
+    };
 
     // 初始化页面时加载物品数据
     fetchItems();
