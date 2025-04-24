@@ -7,11 +7,25 @@ namespace LostAndFoundWebApp.Pages.Admin
 {
     public class ManageItemsModel : PageModel
     {
-        public List<Item> Items { get; set; } = new();
+        public List<Item> Items { get; set; } = [];
 
         public void OnGet()
         {
             Items = DatabaseOperate.GetAllItems();
+        }
+
+        public IActionResult OnGetGetImages(int itemId)
+        {
+            var images = DatabaseOperate.GetImagesByItem(itemId);
+            if (images == null || images.Count == 0)
+            {
+                return new JsonResult(new List<object>()); // 返回空列表
+            }
+
+            return new JsonResult(images.Select(image => new
+            {
+                image.ImagePath
+            }));
         }
 
         public IActionResult OnPostToggle([FromBody] ToggleRequest data)

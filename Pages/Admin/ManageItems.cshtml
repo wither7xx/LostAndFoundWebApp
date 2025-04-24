@@ -21,7 +21,7 @@
     <tbody id="itemTableBody">
         @foreach (var item in Model.Items)
         {
-            <tr id="itemRow-@item.ItemId">
+            <tr id="itemRow-@item.ItemId" class="item-row" data-item-id="@item.ItemId">
                 <td>@item.ItemId</td>
                 <td>@item.Name</td>
                 <td>@item.Location</td>
@@ -46,6 +46,13 @@
                 {
                     <button class="btn btn-sm btn-secondary" disabled>已处理</button>
                 }
+                </td>
+            </tr>
+            <tr id="imageRow-@item.ItemId" class="image-row" style="display: none;">
+                <td colspan="5">
+                    <div class="image-container" id="imageContainer-@item.ItemId">
+                        <p>加载中...</p> <!-- 占位符 -->
+                    </div>
                 </td>
             </tr>
         }
@@ -102,6 +109,49 @@
                     } catch (error) {
                         console.error('请求失败:', error);
                         alert('请求失败，请检查网络连接。');
+                    }
+                });
+            });
+
+            const rows = document.querySelectorAll('.item-row');
+            rows.forEach(row => {
+                row.addEventListener('click', async () => {
+                    const itemId = row.getAttribute('data-item-id');
+                    const imageRow = document.getElementById(`imageRow-${itemId}`);
+                    const imageContainer = document.getElementById(`imageContainer-${itemId}`);
+
+                    if (imageRow.style.display === 'none') {
+                        imageRow.style.display = 'table-row';
+
+                        // 如果图片尚未加载，则从服务器获取
+                        if (!imageContainer.dataset.loaded) {
+                            try {
+                                const response = await fetch(`/Admin/ManageItems?handler=GetImages&itemId=${itemId}`);
+                                if (response.ok) {
+                                    const images = await response.json();
+                                    imageContainer.innerHTML = ''; // 清空占位符
+                                    if (images.length > 0) {
+                                        images.forEach(image => {
+                                            const img = document.createElement('img');
+                                            img.src = image.imagePath;
+                                            img.alt = '物品图片';
+                                            img.className = 'thumbnail';
+                                            imageContainer.appendChild(img);
+                                        });
+                                    } else {
+                                        imageContainer.innerHTML = '<p>没有图片</p>';
+                                    }
+                                    imageContainer.dataset.loaded = true; // 标记为已加载
+                                } else {
+                                    imageContainer.innerHTML = '<p>加载图片失败</p>';
+                                }
+                            } catch (error) {
+                                console.error('加载图片失败:', error);
+                                imageContainer.innerHTML = '<p>加载图片失败</p>';
+                            }
+                        }
+                    } else {
+                        imageRow.style.display = 'none';
                     }
                 });
             });
