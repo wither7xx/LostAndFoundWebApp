@@ -41,17 +41,26 @@ namespace LostAndFoundWebApp.Pages.Admin
             var user = DatabaseOperate.GetUserById(claim.UserId);
             if (user != null && item != null)
             {
-                string subject = "认领申请通过";
+                string subject;
                 string message;
                 if (data.NextStatus == ClaimMetadata.Status.Approved)
                 {
+                    subject = "认领申请通过";
                     message = $"您于{claim.CreateTime}对物品“{item.Name}”的认领申请已被批准，请尽快领取您的物品。";
                 }
                 else
                 {
+                    subject = "认领申请失败";
                     message = $"您于{claim.CreateTime}对物品“{item.Name}”的认领申请已被拒绝。";
                 }
-                await _emailSender.SendEmailAsync(user.Email, subject, message);
+                try
+                {
+                    await _emailSender.SendEmailAsync(user.Email, subject, message);
+                }
+                catch (Exception)
+                {
+                    return BadRequest("邮件发送失败");
+                }
             }
 
             return new JsonResult(new { status = nextStatus });

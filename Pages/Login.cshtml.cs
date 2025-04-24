@@ -47,7 +47,14 @@ namespace LostAndFoundWebApp.Pages
                 protocol: Request.Scheme);
 
             // 发送邮件
-            await _emailSender.SendEmailAsync(Email, "登录链接", $"点击即可登录：{loginLink}");
+            try
+            {
+                await _emailSender.SendEmailAsync(Email, "登录链接", $"点击即可登录：{loginLink}");
+            }
+            catch (Exception)
+            {
+                return BadRequest("邮件发送失败");
+            }
 
             return RedirectToPage("/LoginConfirmation");
         }
