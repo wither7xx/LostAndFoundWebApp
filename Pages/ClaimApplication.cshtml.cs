@@ -18,7 +18,7 @@ namespace LostAndFoundWebApp.Pages
 
         public void OnGet()
         {
-            // ³õÊ¼»¯Ä¬ÈÏÖµ
+            // åˆå§‹åŒ–é»˜è®¤å€¼
             Claim = new LostAndFoundWebApp.Models.Claim
             {
                 CreateTime = DateTime.Now,
@@ -29,16 +29,16 @@ namespace LostAndFoundWebApp.Pages
 
         public async Task<IActionResult> OnPostAsync(IFormFile proofFile)
         {
-            // ÊÖ¶¯ÑéÖ¤ÎÄ¼ş×Ö¶Î£¨ÈÆ¹ı×Ô¶¯ÑéÖ¤£©
+            // æ‰‹åŠ¨éªŒè¯æ–‡ä»¶å­—æ®µï¼ˆç»•è¿‡è‡ªåŠ¨éªŒè¯ï¼‰
             if (proofFile == null || proofFile.Length == 0)
             {
-                ModelState.AddModelError("proofFile", "±ØĞëÉÏ´«Ö¤Ã÷ÎÄ¼ş");
+                ModelState.AddModelError("proofFile", "å¿…é¡»ä¸Šä¼ è¯æ˜æ–‡ä»¶");
             }
 
-            // ÌáÇ°´¦ÀíÎÄ¼şÉÏ´«
+            // æå‰å¤„ç†æ–‡ä»¶ä¸Šä¼ 
 
 
-            string uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "images");
+            string uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "claims");
             if (!Directory.Exists(uploadPath))
             {
                 Directory.CreateDirectory(uploadPath);
@@ -60,24 +60,24 @@ namespace LostAndFoundWebApp.Pages
             Claim.ProofDocPath = $"/uploads/images/{fileName}";
             Console.WriteLine(Claim.ProofDocPath);
 
-            // ÉèÖÃÓÃ»§ID£¨È·±£ÒÑÊÚÈ¨£©
+            // è®¾ç½®ç”¨æˆ·IDï¼ˆç¡®ä¿å·²æˆæƒï¼‰
             Claim.UserId = 1;
 
-            // ÊÖ¶¯ÑéÖ¤ÆäËû×Ö¶Î
+            // æ‰‹åŠ¨éªŒè¯å…¶ä»–å­—æ®µ
             if (Claim.ItemId <= 0)
             {
-                ModelState.AddModelError("Claim.ItemId", "ÎïÆ·IDÎŞĞ§");
+                ModelState.AddModelError("Claim.ItemId", "ç‰©å“IDæ— æ•ˆ");
                 return Page();
             }
 
             if (DatabaseOperate.GetItem(Claim.ItemId) == null)
             {
-                ModelState.AddModelError("Claim.ItemId", "ÎïÆ·ID²»´æÔÚ");
+                ModelState.AddModelError("Claim.ItemId", "ç‰©å“IDä¸å­˜åœ¨");
                 return Page();
             }
            
 
-            // Êı¾İ¿â²Ù×÷
+            // æ•°æ®åº“æ“ä½œ
             try
             {
                 var result = DatabaseOperate.CreateClaim(Claim);
@@ -85,7 +85,7 @@ namespace LostAndFoundWebApp.Pages
             }
             catch (Exception ex)
             {
-                ModelState.AddModelError("", $"Ìá½»Ê§°Ü£º{ex.Message}");
+                ModelState.AddModelError("", $"æäº¤å¤±è´¥ï¼š{ex.Message}");
                 return Page();
             }
         }
