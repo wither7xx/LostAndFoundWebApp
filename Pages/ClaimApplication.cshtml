@@ -1,41 +1,130 @@
 ﻿@page
 @model LostAndFoundWebApp.Pages.ClaimApplicationModel
-@{//认领申请
-	ViewData["Title"] = "认领申请";
-	Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
+@{
+    ViewData["Title"] = "认领申请";
+    Layout = "/Pages/Shared/_Layout.cshtml";
 }
 
-<div class="container mt-5">
-    <h2>认领物品申请</h2>
-    <hr />
+<style>
+    .page-container {
+        background-color: #f5f5f5;
+        min-height: 100vh;
+        padding: 2rem 0;
+    }
 
-    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
-        <!-- 失物ID输入 -->
-        <div class="form-group mb-4">
-            <label asp-for="Claim.ItemId" class="form-label">失物ID</label>
-            <input asp-for="Claim.ItemId" type="number" class="form-control" required />
-            <div class="invalid-feedback">请输入有效的失物ID</div>
-        </div>
+    .form-container {
+        background-color: white;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
 
-        <!-- 申请理由 -->
-        <div class="form-group mb-4">
-            <label asp-for="Claim.ClaimDescription" class="form-label">申请理由</label>
-            <textarea asp-for="Claim.ClaimDescription" class="form-control" rows="4" required></textarea>
-            <div class="invalid-feedback">请填写申请理由</div>
-        </div>
+    .form-title {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
 
-        <!-- 证明文件上传 -->
-        <div class="form-group mb-4">
-            <label class="form-label">证明文件</label>
-            <input type="file" name="proofFile" class="form-control" accept="image/*,.pdf" required />
-            <small class="form-text text-muted">支持图片或PDF文件（最大5MB）</small>
-        </div>
-        <input type="hidden" asp-for="Claim.Status" />
-        <input type="hidden" asp-for="Claim.CreateTime" />
-        <input type="hidden" asp-for="Claim.UserId" />
+    .form-group {
+        margin-bottom: 1.5rem;
+    }
 
-        <button type="submit" class="btn btn-primary">提交申请</button>
-    </form>
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: bold;
+        }
+
+    .form-control {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+    }
+
+    .form-text {
+        color: #6c757d;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .submit-button {
+        text-align: center;
+        margin-top: 2rem;
+    }
+
+        .submit-button button {
+            background-color: #28a745;
+            color: white;
+            border: none;
+            padding: 1rem 3rem;
+            font-size: 1.1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+
+            .submit-button button:hover {
+                background-color: #218838;
+            }
+
+    textarea.form-control {
+        min-height: 100px;
+    }
+
+    .invalid-feedback {
+        display: none;
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.25rem;
+    }
+
+    .was-validated .form-control:invalid ~ .invalid-feedback {
+        display: block;
+    }
+
+    .was-validated .form-control:invalid {
+        border-color: #dc3545;
+    }
+</style>
+
+<div class="page-container">
+    <div class="form-container">
+        <h2 class="form-title">认领物品申请</h2>
+
+        <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+            <!-- 失物ID输入 -->
+            <div class="form-group">
+                <label asp-for="Claim.ItemId">失物ID</label>
+                <input asp-for="Claim.ItemId" type="number" class="form-control" required />
+                <div class="invalid-feedback">请输入有效的失物ID</div>
+            </div>
+
+            <!-- 申请理由 -->
+            <div class="form-group">
+                <label asp-for="Claim.ClaimDescription">申请理由</label>
+                <textarea asp-for="Claim.ClaimDescription" class="form-control" rows="4" required></textarea>
+                <div class="invalid-feedback">请填写申请理由</div>
+            </div>
+
+            <!-- 证明文件上传 -->
+            <div class="form-group">
+                <label>证明文件</label>
+                <input type="file" name="proofFile" class="form-control" accept="image/*,.pdf" required />
+                <small class="form-text">支持图片或PDF文件（最大5MB）</small>
+                <div class="invalid-feedback">请上传证明文件</div>
+            </div>
+
+            <input type="hidden" asp-for="Claim.Status" />
+            <input type="hidden" asp-for="Claim.CreateTime" />
+            <input type="hidden" asp-for="Claim.UserId" />
+
+            <div class="submit-button">
+                <button type="submit">提交申请</button>
+            </div>
+        </form>
+    </div>
 </div>
 
 @section Scripts {

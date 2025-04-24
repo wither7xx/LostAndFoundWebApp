@@ -5,6 +5,88 @@
     Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
 }
 
+<style>
+    .pagination-controls {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 20px;
+        padding: 15px;
+        background-color: white;
+        border-radius: 4px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+    }
+
+    .page-size {
+        margin-right: 20px;
+    }
+
+        .page-size select {
+            padding: 6px 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            background-color: white;
+            cursor: pointer;
+        }
+
+    .pagination {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .page-btn {
+        padding: 8px 12px;
+        border: 1px solid #ddd;
+        background-color: white;
+        border-radius: 4px;
+        cursor: pointer;
+        transition: all 0.2s;
+        min-width: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .page-btn:hover:not(:disabled) {
+            background-color: #f8f9fa;
+            border-color: #0056b3;
+        }
+
+        .page-btn:disabled {
+            background-color: #e9ecef;
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
+    .page-numbers {
+        display: flex;
+        gap: 4px;
+        align-items: center;
+    }
+
+        .page-numbers button {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            background-color: white;
+            border-radius: 4px;
+            cursor: pointer;
+            min-width: 40px;
+        }
+
+            .page-numbers button.active {
+                background-color: #007bff;
+                color: white;
+                border-color: #007bff;
+            }
+
+    .page-info {
+        margin-left: 15px;
+        color: #6c757d;
+        font-size: 14px;
+    }
+</style>
+
 <div class="index-container">
     @if (TempData["ErrorMessage"] != null)
     {
@@ -78,7 +160,16 @@
                 <option value="50">50条/页</option>
             </select>
         </div>
-        <div class="page-numbers" id="pageNumbers"></div>
+        <div class="pagination">
+            <button id="firstPage" class="page-btn" title="首页">首页</button>
+            <button id="prevPage" class="page-btn" title="上一页">上一页</button>
+            <div id="pageNumbers" class="page-numbers"></div>
+            <button id="nextPage" class="page-btn" title="下一页">下一页</button>
+            <button id="lastPage" class="page-btn" title="末页">末页</button>
+            <span class="page-info">
+                第 <span id="currentPage">1</span> 页 / 共 <span id="totalPages">1</span> 页
+            </span>
+        </div>
     </div>
 
     <!-- 详情模态框 -->

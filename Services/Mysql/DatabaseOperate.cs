@@ -2,6 +2,7 @@
 using MySql.Data.MySqlClient;
 using System.Configuration;
 using System.Text;
+using static LostAndFoundWebApp.Pages.IndexModel;
 
 namespace LostAndFoundWebApp.Services.Mysql
 {
@@ -105,89 +106,127 @@ namespace LostAndFoundWebApp.Services.Mysql
             return items;
         }
 
-        public static List<Item> SearchItems(ItemSearchParams searchParams)
+        public class SearchResult
+        {
+            public List<Item> Items { get; set; }
+            public int TotalItems { get; set; }
+            public int CurrentPage { get; set; }
+            public int TotalPages { get; set; }
+        }
+        public static SearchResult SearchItems(ItemSearchParams searchParams)
         {
             var items = new List<Item>();
-            var sql = new StringBuilder("SELECT * FROM Items WHERE 1=1");
+            var whereClause = new StringBuilder("1=1");
             var parameters = new List<MySqlParameter>();
 
             // 动态构建查询条件
             if (!string.IsNullOrWhiteSpace(searchParams.Name))
             {
-                sql.Append(" AND LOWER(Name) LIKE LOWER(@Name)");
+                whereClause.Append(" AND LOWER(Name) LIKE LOWER(@Name)");
                 parameters.Add(new MySqlParameter("@Name", $"%{searchParams.Name.Trim()}%"));
             }
 
             if (!string.IsNullOrWhiteSpace(searchParams.Status))
             {
-                sql.Append(" AND Status = @Status");
+                whereClause.Append(" AND Status = @Status");
                 parameters.Add(new MySqlParameter("@Status", searchParams.Status));
             }
 
             if (searchParams.StartDate.HasValue && searchParams.EndDate.HasValue)
             {
-                sql.Append(" AND Time BETWEEN @StartDate AND @EndDate");
+                whereClause.Append(" AND Time BETWEEN @StartDate AND @EndDate");
                 parameters.Add(new MySqlParameter("@StartDate", searchParams.StartDate));
                 parameters.Add(new MySqlParameter("@EndDate", searchParams.EndDate));
             }
 
             if (!string.IsNullOrWhiteSpace(searchParams.Campus))
             {
-                sql.Append(" AND Campus = @Campus");
+                whereClause.Append(" AND Campus = @Campus");
                 parameters.Add(new MySqlParameter("@Campus", searchParams.Campus));
             }
 
             if (searchParams.IsValid.HasValue)
             {
-                sql.Append(" AND IsValid = @IsValid");
+                whereClause.Append(" AND IsValid = @IsValid");
                 parameters.Add(new MySqlParameter("@IsValid", searchParams.IsValid.Value));
             }
 
             if (!string.IsNullOrWhiteSpace(searchParams.Category))
             {
-                sql.Append(" AND Category = @Category");
+                whereClause.Append(" AND Category = @Category");
                 parameters.Add(new MySqlParameter("@Category", searchParams.Category));
             }
 
+            // 先获取总记录数
+            int totalItems = 0;
+            var countSql = $"SELECT COUNT(*) FROM Items WHERE {whereClause}";
+
             using (var conn = new MySqlConnection(connectionString))
-            using (var cmd = new MySqlCommand(sql.ToString(), conn))
             {
-                cmd.Parameters.AddRange(parameters.ToArray());
-
-                try
+                conn.Open();
+                using (var cmd = new MySqlCommand(countSql, conn))
                 {
-                    conn.Open();
-                    using (var reader = cmd.ExecuteReader())
-                    {
-                        while (reader.Read())
-                        {
-                            items.Add(new Item
-                            {
-                                // 保持原有映射逻辑
-                                ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
-                                Name = reader["Name"]?.ToString() ?? string.Empty,
-                                Location = reader["Location"]?.ToString() ?? string.Empty,
-                                Campus = reader["Campus"]?.ToString() ?? string.Empty,
-                                Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
-                                Description = reader["Description"]?.ToString() ?? string.Empty,
-                                ContactInfo = reader["ContactInfo"]?.ToString() ?? string.Empty,
-                                Status = reader["Status"]?.ToString() ?? ItemMetadata.Status.DefaultStatus,
-                                Category = reader["Category"]?.ToString() ?? ItemMetadata.Category.DefaultCategory,
-                                UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
-                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+                    cmd.Parameters.AddRange(parameters.ToArray());
+                    totalItems = Convert.ToInt32(cmd.ExecuteScalar());
+                }
 
-                            });
+                // 获取分页数据
+                var skip = (searchParams.Page - 1) * searchParams.PageSize;
+                var sql = $"SELECT * FROM Items WHERE {whereClause} ORDER BY Time DESC LIMIT @Skip, @Take";
+
+                using (var cmd = new MySqlCommand(sql, conn))
+                {
+                    cmd.Parameters.AddRange(parameters.ToArray());
+                    cmd.Parameters.AddWithValue("@Skip", skip);
+                    cmd.Parameters.AddWithValue("@Take", searchParams.PageSize);
+
+                    try
+                    {
+                        using (var reader = cmd.ExecuteReader())
+                        {
+                            while (reader.Read())
+                            {
+                                items.Add(new Item
+                                {
+                                    ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
+                                    Name = reader["Name"]?.ToString() ?? string.Empty,
+                                    Location = reader["Location"]?.ToString() ?? string.Empty,
+                                    Campus = reader["Campus"]?.ToString() ?? string.Empty,
+                                    Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
+                                    Description = reader["Description"]?.ToString() ?? string.Empty,
+                                    ContactInfo = reader["ContactInfo"]?.ToString() ?? string.Empty,
+                                    Status = reader["Status"]?.ToString() ?? ItemMetadata.Status.DefaultStatus,
+                                    Category = reader["Category"]?.ToString() ?? ItemMetadata.Category.DefaultCategory,
+                                    UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
+                                    IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+                                });
+                            }
                         }
                     }
-                }
-                catch (Exception ex)
-                {
-                    // 建议使用日志框架记录错误
-                    Console.WriteLine($"搜索失败: {ex.Message}");
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"搜索失败: {ex.Message}");
+                        return new SearchResult
+                        {
+                            Items = new List<Item>(),
+                            TotalItems = 0,
+                            CurrentPage = searchParams.Page,
+                            TotalPages = 0
+                        };
+                    }
                 }
             }
 
-            return items;
+            // 计算总页数
+            int totalPages = (int)Math.Ceiling(totalItems / (double)searchParams.PageSize);
+
+            return new SearchResult
+            {
+                Items = items,
+                TotalItems = totalItems,
+                CurrentPage = searchParams.Page,
+                TotalPages = totalPages
+            };
         }
 
         // 获取单个失物信息
@@ -819,7 +858,102 @@ namespace LostAndFoundWebApp.Services.Mysql
                 }
             }
         }
+        // 获取物品表中的总记录数
+        public static int GetItemsCount()
+        {
+            using var connection = new MySqlConnection(connectionString);
+            var command = connection.CreateCommand();
+            command.CommandText = "SELECT COUNT(*) FROM Items";
 
+            try
+            {
+                connection.Open();
+                return Convert.ToInt32(command.ExecuteScalar());
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"获取总记录数失败: {ex.Message}");
+                return 0;
+            }
+        }
+
+        // 获取分页后的物品列表
+        public static List<Item> GetPaginatedItems(int skip, int take)
+        {
+            var items = new List<Item>();
+            var sql = "SELECT * FROM Items ORDER BY Time DESC LIMIT @Skip, @Take";
+
+            using (var connection = new MySqlConnection(connectionString))
+            using (var command = new MySqlCommand(sql, connection))
+            {
+                command.Parameters.AddWithValue("@Skip", skip);
+                command.Parameters.AddWithValue("@Take", take);
+
+                try
+                {
+                    connection.Open();
+                    using (var reader = command.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            items.Add(new Item
+                            {
+                                ItemId = reader["ItemID"] != DBNull.Value ? Convert.ToInt32(reader["ItemID"]) : 0,
+                                Name = reader["Name"]?.ToString() ?? string.Empty,
+                                Location = reader["Location"]?.ToString() ?? string.Empty,
+                                Campus = reader["Campus"]?.ToString() ?? string.Empty,
+                                Time = reader["Time"] != DBNull.Value ? Convert.ToDateTime(reader["Time"]) : DateTime.MinValue,
+                                Description = reader["Description"]?.ToString() ?? string.Empty,
+                                ContactInfo = reader["ContactInfo"]?.ToString() ?? string.Empty,
+                                Status = reader["Status"]?.ToString() ?? ItemMetadata.Status.DefaultStatus,
+                                Category = reader["Category"]?.ToString() ?? ItemMetadata.Category.DefaultCategory,
+                                UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
+                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+                            });
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"获取分页数据失败: {ex.Message}");
+                }
+            }
+
+            return items;
+        }
+
+        // 获取符合搜索条件的物品总数
+        public static int GetSearchItemsCount(ItemSearchParams searchParams)
+        {
+            using var connection = new MySqlConnection(connectionString);
+            var sql = new StringBuilder("SELECT COUNT(*) FROM Items WHERE 1=1");
+            var parameters = new List<MySqlParameter>();
+
+            // 使用现有的搜索条件构建逻辑
+            if (!string.IsNullOrWhiteSpace(searchParams.Name))
+            {
+                sql.Append(" AND LOWER(Name) LIKE LOWER(@Name)");
+                parameters.Add(new MySqlParameter("@Name", $"%{searchParams.Name.Trim()}%"));
+            }
+
+            // ... 其他搜索条件保持不变 ...
+
+            using (var command = new MySqlCommand(sql.ToString(), connection))
+            {
+                command.Parameters.AddRange(parameters.ToArray());
+
+                try
+                {
+                    connection.Open();
+                    return Convert.ToInt32(command.ExecuteScalar());
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"获取搜索结果总数失败: {ex.Message}");
+                    return 0;
+                }
+            }
+        }
     }
 
 }
