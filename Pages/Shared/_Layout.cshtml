@@ -36,12 +36,12 @@
 							</a>
 						</li>
 						<!-- 实际使用时，取消注释掉下面的判断语句 -->
-						@* @if (User.IsInRole("Admin")) *@
-						@* { *@
+						 @*@if (User.IsInRole("Admin")) *@
+						 @*{*@ 
 								<li class="nav-item">
-									<a class="nav-link" asp-area="" asp-page="/Admin/Index">管理员</a>
+									<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/Admin/Index" ? "nav-link-active" : "")" asp-area="" asp-page="/Admin/Index">管理员</a>
 								</li>
-						@* } *@
+						 @*}*@ 
 					</ul>
 					<ul class="navbar-nav">
 						@if (User.Identity?.IsAuthenticated ?? false)
