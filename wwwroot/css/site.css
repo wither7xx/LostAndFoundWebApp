@@ -236,7 +236,7 @@ button:hover {
     }
 
     .data-table tr:nth-child(even) {
-        background-color: #e3dfdf;
+        background-color: #f9f9f9;
     }
 
 .pagination-controls {

@@ -1,43 +1,148 @@
 ﻿@page
-@model LostAndFoundWebApp.Pages.Admin.ManageUsersModel
-@{
-	ViewData["Title"] = "用户管理";
+<style>
+/* 主容器优化 */
+.laf_container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
-<h1>用户管理</h1>
-<form method="post">
-    @Html.AntiForgeryToken()
-</form>
-<table class="table">
-	<thead>
-		<tr>
-			<th>用户ID</th>
-			<th>邮箱</th>
-			<th>用户名</th>
-			<th>角色</th>
-			<th>状态</th>
-			<th>操作</th>
-		</tr>
-	</thead>
-	<tbody id="userTableBody">
-		@foreach (var user in Model.Users)
-		{
-			<tr id="userRow-@user.UserId">
-				<td>@user.UserId</td>
-				<td>@user.Email</td>
-				<td>@user.Name</td>
-				<td>@user.Role</td>
-				<td id="userStatus-@user.UserId">@((user.IsValid == true) ? "有效" : "无效")</td>
-				<td>
-					<button class="btn btn-sm btn-primary toggle-status-btn" data-user-id="@user.UserId">
-					    @((user.IsValid == true) ? "禁用" : "启用")
-					</button>
-				</td>
-			</tr>
-		}
-	</tbody>
-</table>
+/* 表格深度美化 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
 
+.table th {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+}
+
+/* 斑马纹效果 */
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+/* 状态标签样式 */
+.status-badge {
+    display: inline-block;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.85em;
+}
+
+.status-valid {
+    background: #27ae60;
+    color: white;
+}
+
+.status-invalid {
+    background: #e74c3c;
+    color: white;
+}
+
+/* 操作按钮美化 */
+.action-buttons {
+    display: flex;
+    gap: 8px;
+}
+
+.btn {
+    padding: 6px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
+}
+
+.btn-enable {
+    background: #27ae60;
+    color: white;
+}
+
+.btn-disable {
+    background: #e74c3c;
+    color: white;
+}
+
+.btn:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+/* 标题优化 */
+h1 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+    display: inline-block;
+}
+</style>
+
+
+@model LostAndFoundWebApp.Pages.Admin.ManageUsersModel
+@{
+    ViewData["Title"] = "用户管理";
+}
+
+<div class="laf_container">
+    <h1>用户管理</h1>
+    
+    <form method="post">
+        @Html.AntiForgeryToken()
+    </form>
+    
+    <table class="table">
+        <thead>
+            <tr>
+                <th>用户ID</th>
+                <th>邮箱</th>
+                <th>用户名</th>
+                <th>角色</th>
+                <th>状态</th>
+                <th>操作</th>
+            </tr>
+        </thead>
+        <tbody id="userTableBody">
+            @foreach (var user in Model.Users)
+            {
+                <tr id="userRow-@user.UserId">
+                    <td>@user.UserId</td>
+                    <td>@user.Email</td>
+                    <td>@user.Name</td>
+                    <td>@user.Role</td>
+                    <td>
+                        <span class="status-badge @((user.IsValid == true) ? "status-valid" : "status-invalid")">
+                            @((user.IsValid == true) ? "有效" : "无效")
+                        </span>
+                    </td>
+                    <td>
+                        <button class="btn @((user.IsValid == true) ? "btn-disable" : "btn-enable") toggle-status-btn" 
+                                data-user-id="@user.UserId">
+                            @((user.IsValid == true) ? "禁用账户" : "启用账户")
+                        </button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
