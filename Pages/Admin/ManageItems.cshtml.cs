@@ -22,7 +22,7 @@ namespace LostAndFoundWebApp.Pages.Admin
             }
 
             int itemId = data.ItemId.Value;
-            if (!DatabaseOperate.UpdateItem(itemId, true))
+            if (!DatabaseOperate.UpdateItem(itemId, false))
             {
                 return BadRequest("更新物品有效性失败");
             }
