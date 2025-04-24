@@ -31,7 +31,7 @@
 				<td>
 					@if (!string.IsNullOrEmpty(claim.ProofDocPath))
 					{
-						<a href="@Url.Content($"~/uploads/{System.IO.Path.GetFileName(claim.ProofDocPath)}")" target="_blank">
+						<a href="@Url.Content($"~/uploads/claims/{System.IO.Path.GetFileName(claim.ProofDocPath)}")" target="_blank">
 							@System.IO.Path.GetFileName(claim.ProofDocPath)
 						</a>
 					}

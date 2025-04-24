@@ -5,3 +5,71 @@
     Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
 }
 <h1>登记物品</h1>
+
+<form method="post" enctype="multipart/form-data">
+    <div>
+        <label for="Name">物品名称</label>
+        <input type="text" id="Name" name="Name" required />
+    </div>
+    <div>
+        <label for="Status">丢失物品/拾获物品？</label>
+        <select id="Status" name="Status" required>
+            <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Lost">丢失物品</option>
+            <option value="@LostAndFoundWebApp.Models.ItemMetadata.Status.Found">拾获物品</option>
+        </select>
+    </div>
+    <div>
+        <label for="Location">丢失/拾获地点</label>
+        <input type="text" id="Location" name="Location" required />
+    </div>
+    <div>
+        <label for="Campus">校区</label>
+        <select id="Campus" name="Campus" required>
+            <option value="campus1">前卫南区</option>
+            <option value="campus2">南岭校区</option>
+            <option value="campus3">和平校区</option>
+            <option value="campus4">朝阳校区</option>
+            <option value="campus5">新民校区</option>
+            <option value="campus6">南湖校区</option>
+        </select>
+    </div>
+    <div>
+        <label for="Time">丢失/拾获时间</label>
+        <input type="datetime-local" id="Time" name="Time" required />
+    </div>
+    <div>
+        <label for="Description">描述</label>
+        <textarea id="Description" name="Description" required></textarea>
+    </div>
+    <div>
+        <label for="ContactInfo">联系方式</label>
+        <input type="text" id="ContactInfo" name="ContactInfo" required />
+    </div>
+    <div>
+        <label for="Category">类别</label>
+        <select id="Category" name="Category" required>
+            <option value="electronics">电子设备</option>
+            <option value="documents">文件/书籍</option>
+            <option value="dailyitems">生活用品</option>
+        </select>
+    </div>
+    <div>
+        <label for="Images">上传图片 (最多5张)</label>
+        <input type="file" id="Images" name="Images" accept="image/*" multiple />
+    </div>
+    <div class="form-group">
+        <button type="submit">提交</button>
+	</div>
+</form>
+
+@section Scripts {
+    <script>
+    document.getElementById('Images').addEventListener('change', function(event) {
+        const files = event.target.files;
+        if (files.length > 5) {
+            alert('最多只能上传5张图片');
+            event.target.value = '';
+        }
+    });
+    </script>
+}
