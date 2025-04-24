@@ -48,28 +48,6 @@
             };
 
             row.innerHTML = `
-<<<<<<< Updated upstream
-            <td>${item.itemId}-${item.name}</td>
-            <td>${item.status}</td>
-            <td>${campusMap2[item.category]}</td>
-            <td>${item.time}</td>
-            <td>${item.location}</td>
-            <td>${campusMap1[item.campus]}</td>
-            <td>${item.isValid ? '是' : '否'}</td>
-            <td></td>
-        `;
-
-            // 找到最后一个td（操作列）
-            const actionTd = row.querySelector('td:last-child');
-
-            // 创建并添加按钮
-            const button = document.createElement('button');
-            button.textContent = '查看';
-            button.className = 'detail-btn'; // 应用 CSS 类
-            button.addEventListener('click', () => handleAction(item.itemId));
-            actionTd.appendChild(button);
-
-=======
                 <td>${item.itemId}-${item.name}</td>
                 <td>${item.status}</td>
                 <td>${campusMap2[item.category] || item.category}</td>
@@ -79,7 +57,6 @@
                 <td>${item.isValid ? '是' : '否'}</td>
                 <td><button onclick="handleAction(${item.itemId})">查看</button></td>
             `;
->>>>>>> Stashed changes
             itemList.appendChild(row);
         });
     }
