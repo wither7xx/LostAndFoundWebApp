@@ -4,4 +4,55 @@
 	ViewData["Title"] = "认领申请";
 	Layout = "/Pages/Shared/_Layout.cshtml"; // 指定布局文件的路径
 }
-<h1>认领申请</h1>
+
+<div class="container mt-5">
+    <h2>认领物品申请</h2>
+    <hr />
+
+    <form method="post" enctype="multipart/form-data" class="needs-validation" novalidate>
+        <!-- 失物ID输入 -->
+        <div class="form-group mb-4">
+            <label asp-for="Claim.ItemId" class="form-label">失物ID</label>
+            <input asp-for="Claim.ItemId" type="number" class="form-control" required />
+            <div class="invalid-feedback">请输入有效的失物ID</div>
+        </div>
+
+        <!-- 申请理由 -->
+        <div class="form-group mb-4">
+            <label asp-for="Claim.ClaimDescription" class="form-label">申请理由</label>
+            <textarea asp-for="Claim.ClaimDescription" class="form-control" rows="4" required></textarea>
+            <div class="invalid-feedback">请填写申请理由</div>
+        </div>
+
+        <!-- 证明文件上传 -->
+        <div class="form-group mb-4">
+            <label class="form-label">证明文件</label>
+            <input type="file" name="proofFile" class="form-control" accept="image/*,.pdf" required />
+            <small class="form-text text-muted">支持图片或PDF文件（最大5MB）</small>
+        </div>
+        <input type="hidden" asp-for="Claim.Status" />
+        <input type="hidden" asp-for="Claim.CreateTime" />
+        <input type="hidden" asp-for="Claim.UserId" />
+
+        <button type="submit" class="btn btn-primary">提交申请</button>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        // 客户端表单验证
+        (function () {
+            'use strict'
+            const forms = document.querySelectorAll('.needs-validation')
+            Array.from(forms).forEach(form => {
+                form.addEventListener('submit', event => {
+                    if (!form.checkValidity()) {
+                        event.preventDefault()
+                        event.stopPropagation()
+                    }
+                    form.classList.add('was-validated')
+                }, false)
+            })
+        })()
+    </script>
+}

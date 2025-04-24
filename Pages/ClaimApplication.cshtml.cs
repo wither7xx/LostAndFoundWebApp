@@ -1,12 +1,93 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
+using LostAndFoundWebApp.Models;
+using LostAndFoundWebApp.Services.Mysql;
+using System;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace LostAndFoundWebApp.Pages
 {
-    public class ClaimApplicationModel : PageModel
+    public class ClaimApplicationModel(IWebHostEnvironment environment) : PageModel
     {
+
+        private readonly IWebHostEnvironment _environment = environment;
+
+        [BindProperty]
+        public LostAndFoundWebApp.Models.Claim Claim { get; set; } = null;
+
         public void OnGet()
         {
+            // 初始化默认值
+            Claim = new LostAndFoundWebApp.Models.Claim
+            {
+                CreateTime = DateTime.Now,
+                Status = ClaimMetadata.Status.DefaultStatus
+            };
+        }
+
+
+        public async Task<IActionResult> OnPostAsync(IFormFile proofFile)
+        {
+            // 手动验证文件字段（绕过自动验证）
+            if (proofFile == null || proofFile.Length == 0)
+            {
+                ModelState.AddModelError("proofFile", "必须上传证明文件");
+            }
+
+            // 提前处理文件上传
+
+
+            string uploadPath = Path.Combine(_environment.WebRootPath, "uploads", "images");
+            if (!Directory.Exists(uploadPath))
+            {
+                Directory.CreateDirectory(uploadPath);
+            }
+            var guid = Guid.NewGuid();
+            var imageIdx = 0;
+            var image = proofFile;
+          
+           
+            string fileName = $"{guid}-{imageIdx}{Path.GetExtension(image.FileName)}";
+            imageIdx++;
+            string filePath = Path.Combine(uploadPath, fileName);
+
+             using (var stream = new FileStream(filePath, FileMode.Create))
+                {
+                    image.CopyTo(stream);
+                }
+
+            Claim.ProofDocPath = $"/uploads/images/{fileName}";
+            Console.WriteLine(Claim.ProofDocPath);
+
+            // 设置用户ID（确保已授权）
+            Claim.UserId = 1;
+
+            // 手动验证其他字段
+            if (Claim.ItemId <= 0)
+            {
+                ModelState.AddModelError("Claim.ItemId", "物品ID无效");
+                return Page();
+            }
+
+            if (DatabaseOperate.GetItem(Claim.ItemId) == null)
+            {
+                ModelState.AddModelError("Claim.ItemId", "物品ID不存在");
+                return Page();
+            }
+           
+
+            // 数据库操作
+            try
+            {
+                var result = DatabaseOperate.CreateClaim(Claim);
+                return RedirectToPage("/Index");
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"提交失败：{ex.Message}");
+                return Page();
+            }
         }
     }
 }
