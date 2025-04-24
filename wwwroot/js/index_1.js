@@ -64,8 +64,8 @@
             // 创建并添加按钮
             const button = document.createElement('button');
             button.textContent = '查看';
-            button.backgroundColor = 'green';
-            button.addEventListener('click', () => handleAction(item.itemId));  // 改用闭包绑定
+            button.className = 'detail-btn'; // 应用 CSS 类
+            button.addEventListener('click', () => handleAction(item.itemId));
             actionTd.appendChild(button);
 
             itemList.appendChild(row);

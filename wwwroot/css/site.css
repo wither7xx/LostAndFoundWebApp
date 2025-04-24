@@ -236,7 +236,7 @@ button:hover {
     }
 
     .data-table tr:nth-child(even) {
-        background-color: #f9f9f9;
+        background-color: #e3dfdf;
     }
 
 .pagination-controls {
@@ -281,6 +281,31 @@ button:hover {
     border-radius: 4px;
     cursor: button;
 }
+/* 新增/修改按钮样式 */
+.detail-btn {
+    /* 基础样式 */
+    border: none;
+    border-radius: 6px;
+    background-color: #4CAF50; /* 主绿色 */
+    color: white;
+    padding: 6px 12px;
+    cursor: pointer;
+    transition: background-color 0.2s; /* 平滑过渡效果 */
+    /* 文字样式 */
+    font-family: inherit;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+    /* 悬停状态 */
+    .detail-btn:hover {
+        background-color: #45a049; /* 加深15%的绿色 */
+    }
+
+    /* 点击状态 */
+    .detail-btn:active {
+        background-color: #3d8c40;
+    }
 
 /* 图片列表样式 */
 .image-container {
