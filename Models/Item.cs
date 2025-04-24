@@ -64,7 +64,12 @@ public static class ItemMetadata
             Unknown,
             "electronics",
             "documents",
-            "dailyitems"
+            "dailyitems",
+            "academic",
+            "clothing",
+            "valuables",
+            "sports",
+            "others"
         ];
     };
 }
