@@ -41,7 +41,9 @@
                 dailyitems: '生活用品',
                 academic: '学术用品',
                 clothing: '衣物',
-                valuables:'贵重物品'
+                valuables: '贵重物品',
+                sports: '运动用品',
+                others:'其它物品'
             };
 
             // 在模板字符串中为操作列预留空<td>
