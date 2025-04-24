@@ -61,8 +61,16 @@ namespace LostAndFoundWebApp.Pages
             Console.WriteLine(Claim.ProofDocPath);
 
             // 设置用户ID（确保已授权）
-            Claim.UserId = 1;
-
+            try
+            {
+                var userIDClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                Claim.UserId = int.Parse(userIDClaim ?? string.Empty);
+            }
+            catch (Exception)
+            {
+                TempData["ErrorMessage"] = "无法获取当前用户信息，请重新登录。";
+                return RedirectToPage("/Index");
+            }
             // 手动验证其他字段
             if (Claim.ItemId <= 0)
             {
