@@ -88,5 +88,22 @@ namespace LostAndFoundWebApp.Pages
                 return new JsonResult(new { error = "搜索失败" }) { StatusCode = 500 };
             }
         }
+        public IActionResult OnGetItemDetails(int itemId)
+        {
+            try
+            {
+                var item = DatabaseOperate.GetItem(itemId);
+                if (item != null)
+                {
+                    return new JsonResult(new { success = true, item = item });
+                }
+                return new JsonResult(new { success = false, message = "未找到物品" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "获取物品详情失败");
+                return new JsonResult(new { success = false, message = "获取物品详情失败" });
+            }
+        }
     }
 }

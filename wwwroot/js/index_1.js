@@ -212,7 +212,97 @@
     fetchItems();
 
     // 全局挂载操作函数
-    window.handleAction = function (itemId) {
+    window.handleAction = async function (itemId) {
         console.log('操作项目ID:', itemId);
+        try {
+            const response = await fetch(`/Index?handler=ItemDetails&itemId=${itemId}`);
+            if (!response.ok) {
+                throw new Error('获取物品详情失败');
+            }
+
+            const data = await response.json();
+            if (data.success) {
+                showItemDetails(data.item);
+            } else {
+                alert(data.message || '获取物品详情失败');
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            alert('获取物品详情失败');
+        }
+    };
+
+    // 添加显示物品详情的函数
+    function showItemDetails(item) {
+        const campusMap = {
+            campus1: '前卫南区',
+            campus2: '南岭校区',
+            campus3: '和平校区',
+            campus4: '朝阳校区',
+            campus5: '新民校区',
+            campus6: '南湖校区'
+        };
+
+        const categoryMap = {
+            electronics: '电子设备',
+            documents: '文档/书籍',
+            dailyitems: '生活用品',
+            academic: '学术用品',
+            clothing: '衣物',
+            valuables: '贵重物品',
+            sports: '运动用品',
+            others: '其它物品'
+        };
+
+        const statusMap = {
+            'lost': '丢失物品',
+            'found': '拾获物品'
+        };
+
+        // 使用已有的模态框元素
+        const modal = document.getElementById('detailModal');
+        const overlay = document.getElementById('modalOverlay');
+        const modalContent = document.getElementById('modalContent');
+
+        // 填充内容
+        modalContent.innerHTML = `
+        <div class="item-details">
+            <p><strong>物品编号：</strong>${item.itemId}</p>
+            <p><strong>物品名称：</strong>${item.name}</p>
+            <p><strong>状态：</strong>${statusMap[item.status] || item.status}</p>
+            <p><strong>分类：</strong>${categoryMap[item.category] || item.category}</p>
+            <p><strong>时间：</strong>${formatDate(item.time)}</p>
+            <p><strong>地点：</strong>${item.location}</p>
+            <p><strong>校区：</strong>${campusMap[item.campus] || item.campus}</p>
+            <p><strong>描述：</strong>${item.description || '无'}</p>
+            <p><strong>联系方式：</strong>${item.contactInfo || '无'}</p>
+            <p><strong>是否有效：</strong>${item.isValid ? '是' : '否'}</p>
+        </div>
+    `;
+
+        // 显示模态框和遮罩层
+        modal.style.display = 'block';
+        overlay.style.display = 'block';
+
+        // 关闭按钮事件
+        const closeBtn = modal.querySelector('.close-btn');
+        const closeModal = () => {
+            modal.style.display = 'none';
+            overlay.style.display = 'none';
+        };
+
+        closeBtn.onclick = closeModal;
+
+        // 点击遮罩层关闭
+        overlay.onclick = closeModal;
+
+        // ESC键关闭
+        const escHandler = (event) => {
+            if (event.key === 'Escape') {
+                closeModal();
+                document.removeEventListener('keydown', escHandler);
+            }
+        };
+        document.addEventListener('keydown', escHandler);
     };
 });
