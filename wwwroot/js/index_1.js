@@ -136,23 +136,24 @@
     searchForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         const searchParams = {
-            name: document.getElementById('searchName').value.trim() || null,
-            status: document.getElementById('searchStatus').value || null,
-            startDate: document.getElementById('searchStartDate').value
+            name: document.getElementById('searchName')?.value.trim() || null,
+            status: document.getElementById('searchStatus')?.value || null,
+            startDate: document.getElementById('searchStartDate')?.value
                 ? new Date(document.getElementById('searchStartDate').value).toISOString()
                 : null,
-            endDate: document.getElementById('searchEndDate').value
+            endDate: document.getElementById('searchEndDate')?.value
                 ? new Date(document.getElementById('searchEndDate').value).toISOString()
                 : null,
-            campus: document.getElementById('searchCampus').value || null,
-            isValid: document.getElementById('searchValidity').value === 'valid'
+            campus: document.getElementById('searchCampus')?.value || null,
+            isValid: document.getElementById('searchValidity')?.value === 'valid'
                 ? true
-                : (document.getElementById('searchValidity').value === 'invalid' ? false : null),
-            onlyMyItems: document.getElementById('onlyMyItems').checked,
+                : (document.getElementById('searchValidity')?.value === 'invalid' ? false : null),
+            // 检查元素是否存在
+            onlyMyItems: document.getElementById('onlyMyItems')?.checked || false,
             userID: null,
-            category: document.getElementById('searchCategory').value || null,
+            category: document.getElementById('searchCategory')?.value || null,
             page: currentPage,
-            pageSize: parseInt(document.getElementById('pageSize').value)
+            pageSize: parseInt(document.getElementById('pageSize')?.value || '10')
         };
 
         console.log('Search parameters:', searchParams); // 添加调试日志
