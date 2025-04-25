@@ -57,14 +57,14 @@
 		<li><a class="dropdown-item" asp-area="" asp-page="/Admin/ManageClaims">认领申请管理</a></li>
 	</ul>
 </li>
-						@* } *@
-						<li class="nav-item">
-							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/person_index" ? "nav-link-active" : "")" asp-area="" asp-page="/person_index">
-								<img src="/images/claim.png" alt="Claim Icon" width="24" height="24">我的信息
-							</a>
-						</li>
+						@* } *@		
 					</ul>
 					<ul class="navbar-nav">
+						<li class="nav-item">
+							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/person_index" ? "nav-link-active" : "")" asp-area="" asp-page="/person_index">
+								<img src="/images/person.png" alt="Claim Icon" width="24" height="24">我的信息
+							</a>
+						</li>
 						@if (User.Identity?.IsAuthenticated ?? false)
 						{
 							<li class="nav-item">

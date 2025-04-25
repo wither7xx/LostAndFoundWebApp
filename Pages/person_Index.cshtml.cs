@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace LostAndFoundWebApp.Pages
 {
-    public class person_IndexModel : PageModel
+    public class PersonModel : PageModel
     {
         public void OnGet()
         {

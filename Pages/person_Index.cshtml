@@ -1,4 +1,106 @@
 ﻿@page
-@model LostAndFoundWebApp.Pages.person_IndexModel
+@model LostAndFoundWebApp.Pages.PersonModel
 @{
+    ViewData["Title"] = "个人信息";
 }
+
+<style>
+/* 复用管理界面容器样式 */
+.laf_container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* 新增信息框样式 */
+.info-box {
+    background: #e6f0f3;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    padding: 1rem;
+    margin-bottom: 1rem;
+}
+
+.info-item {
+    margin: 1rem 0;
+    font-size: 1.1rem;
+    color: #34495e;
+}
+
+.info-item strong {
+    color: #2c3e50;
+    min-width: 100px;
+    display: inline-block;
+}
+
+/* 复用表格样式 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.table th {
+    background: #45a049;
+    color: white;
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+}
+
+/* 状态徽章 */
+.status-badge {
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+}
+/* 斑马纹效果 */
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+.pending { background: #fef3c7; color: #92400e; }
+.rejected { background: #fee2e2; color: #991b1b; }
+</style>
+
+<div class="laf_container">
+    <!-- 个人信息框 -->
+    <div class="info-box">
+        <h1 style="margin-top:0; text-align: center;">个人信息</h1>
+      <hr class="my-hr" width="100%" color="black" size="2">
+        <div class="info-item">
+            <strong>用户ID：</strong> 
+        </div>
+        <div class="info-item">
+            <strong>昵称：</strong> 
+        </div>
+        <div class="info-item">
+            <strong>我的邮箱：</strong> 
+        </div>
+    </div>
+
+    <!-- 认领申请表格 -->
+    <h1>我的认领申请</h1>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>申请ID</th>
+                <th>物品ID</th>
+                <th>描述</th>
+                <th>状态</th>
+            </tr>
+        </thead>
+       <tbody id="claimTableBody">
+
+</tbody>
+    </table>
+</div>
