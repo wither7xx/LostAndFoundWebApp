@@ -55,7 +55,7 @@
                 <td>${item.location}</td>
                 <td>${campusMap1[item.campus] || item.campus}</td>
                 <td>${item.isValid ? '是' : '否'}</td>
-                <td><button onclick="handleAction(${item.itemId})">查看</button></td>
+                <td><button class = "detail-btn" onclick="handleAction(${item.itemId})">查看</button></td>
             `;
             itemList.appendChild(row);
         });
