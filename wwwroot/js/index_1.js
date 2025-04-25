@@ -226,6 +226,7 @@
             const data = await response.json();
             if (data.success) {
                 showItemDetails(data.item);
+                await showItemImagesAsync(data.item);
             } else {
                 alert(data.message || '获取物品详情失败');
             }
@@ -266,6 +267,7 @@
         const modal = document.getElementById('detailModal');
         const overlay = document.getElementById('modalOverlay');
         const modalContent = document.getElementById('modalContent');
+        const imageContainer = document.getElementById(`imageContainer`);
 
         // 填充内容
         modalContent.innerHTML = `
@@ -282,6 +284,7 @@
             <p><strong>是否有效：</strong>${item.isValid ? '是' : '否'}</p>
         </div>
     `;
+        imageContainer.innerHTML = '<p>加载中...</p>';
 
         // 显示模态框和遮罩层
         modal.style.display = 'block';
@@ -308,4 +311,32 @@
         };
         document.addEventListener('keydown', escHandler);
     };
+
+    async function showItemImagesAsync(item) {
+        const imageContainer = document.getElementById(`imageContainer`);
+        try {
+            const response = await fetch(`/Index?handler=GetImages&itemId=${item.itemId}`);
+            if (response.ok) {
+                const images = await response.json();
+                imageContainer.innerHTML = '';
+                if (images.length > 0) {
+                    images.forEach(image => {
+                        const img = document.createElement('img');
+                        img.src = image.imagePath;
+                        img.alt = '物品图片';
+                        img.className = 'thumbnail';
+                        imageContainer.appendChild(img);
+                    });
+                } else {
+                    imageContainer.innerHTML = '<p>没有图片</p>';
+                }
+                imageContainer.dataset.loaded = true;
+            } else {
+                imageContainer.innerHTML = '<p>加载图片失败</p>';
+            }
+        } catch (error) {
+            console.error('加载图片失败:', error);
+            imageContainer.innerHTML = '<p>加载图片失败</p>';
+        }
+    }
 });

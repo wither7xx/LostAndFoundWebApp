@@ -112,5 +112,19 @@ namespace LostAndFoundWebApp.Pages
                 return new JsonResult(new { success = false, message = "获取物品详情失败" });
             }
         }
+
+        public IActionResult OnGetGetImages(int itemId)
+        {
+            var images = DatabaseOperate.GetImagesByItem(itemId);
+            if (images == null || images.Count == 0)
+            {
+                return new JsonResult(new List<object>());
+            }
+
+            return new JsonResult(images.Select(image => new
+            {
+                image.ImagePath
+            }));
+        }
     }
 }
