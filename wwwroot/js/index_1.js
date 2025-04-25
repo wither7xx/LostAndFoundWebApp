@@ -49,7 +49,7 @@
 
             row.innerHTML = `
                 <td>${item.itemId}-${item.name}</td>
-                <td>${item.status}</td>
+                <td>${item.status === 'Lost' ? '丢失物品' : '拾获物品'}</td>
                 <td>${campusMap2[item.category] || item.category}</td>
                 <td>${formatDate(item.time)}</td>
                 <td>${item.location}</td>
