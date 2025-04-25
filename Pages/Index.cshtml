@@ -164,6 +164,15 @@
         .close-btn:hover {
             color: #333;
         }
+
+    .checkbox-container {
+        display: flex;
+        align-items: center;
+    }
+
+    .checkbox-container input[type="checkbox"] {
+        margin-right: 5px;
+    }
 </style>
 
 <div class="index-container">
@@ -210,7 +219,7 @@
             </select>
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
-                <div>
+                <div class="checkbox-container">
                     <input type="checkbox" id="onlyMyItems" name="onlyMyItems">
                     <label for="onlyMyItems">仅查看我登记的物品</label>
                 </div>
