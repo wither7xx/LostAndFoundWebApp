@@ -78,13 +78,13 @@
         <h1 style="margin-top:0; text-align: center;">个人信息</h1>
       <hr class="my-hr" width="100%" color="black" size="2">
         <div class="info-item">
-            <strong>用户ID：</strong> 
+            <strong>用户ID：@(Model.UserId)</strong> 
         </div>
         <div class="info-item">
-            <strong>昵称：</strong> 
+            <strong>昵称：@(Model.Name)</strong> 
         </div>
         <div class="info-item">
-            <strong>我的邮箱：</strong> 
+            <strong>我的邮箱：@(Model.Email)</strong> 
         </div>
     </div>
 
@@ -99,8 +99,29 @@
                 <th>状态</th>
             </tr>
         </thead>
-       <tbody id="claimTableBody">
-
-</tbody>
+        <tbody id="itemTableBody">
+            @foreach (var claim in Model.Claims)
+            {
+                <tr id="claimRow-@claim.ClaimId" class="claim-row" data-claim-id="@claim.ClaimId">
+                    <td>@claim.ClaimId</td>
+                    <td>@claim.ItemId</td>
+                    <td>@claim.ClaimDescription</td>
+                    <td id="claimStatus-@claim.ClaimId">
+                        @if (claim.Status == LostAndFoundWebApp.Models.ClaimMetadata.Status.Approved)
+                        {
+                            @("已通过")
+                        }
+                        else if (claim.Status == LostAndFoundWebApp.Models.ClaimMetadata.Status.Rejected)
+                        {
+                            @("已拒绝")
+                        }
+                        else 
+                        {
+                            @("待处理")
+                        }
+                    </td>
+                </tr>
+            }
+        </tbody>
     </table>
 </div>
