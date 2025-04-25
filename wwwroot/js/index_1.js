@@ -146,8 +146,8 @@
                 : null,
             campus: document.getElementById('searchCampus').value || null,
             isValid: document.getElementById('searchValidity').value === 'valid'
-                ? 1
-                : (document.getElementById('searchValidity').value === 'invalid' ? 0 : null),
+                ? true
+                : (document.getElementById('searchValidity').value === 'invalid' ? false : null),
             category: document.getElementById('searchCategory').value || null,
             page: currentPage,
             pageSize: parseInt(document.getElementById('pageSize').value)
