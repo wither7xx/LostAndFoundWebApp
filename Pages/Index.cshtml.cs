@@ -2,6 +2,7 @@ using LostAndFoundWebApp.Models;
 using LostAndFoundWebApp.Services.Mysql;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System.Security.Claims;
 
 namespace LostAndFoundWebApp.Pages
 {
@@ -79,6 +80,12 @@ namespace LostAndFoundWebApp.Pages
         {
             try
             {
+                if (searchParams.OnlyMyItems.HasValue && searchParams.OnlyMyItems.Value)
+                {
+                    var userIDClaim = User.FindFirstValue(ClaimTypes.NameIdentifier);
+                    searchParams.UserID = int.Parse(userIDClaim ?? string.Empty);
+                }
+
                 var result = DatabaseOperate.SearchItems(searchParams);
                 return new JsonResult(result);
             }

@@ -148,6 +148,8 @@
             isValid: document.getElementById('searchValidity').value === 'valid'
                 ? true
                 : (document.getElementById('searchValidity').value === 'invalid' ? false : null),
+            onlyMyItems: document.getElementById('onlyMyItems').checked,
+            userID: null,
             category: document.getElementById('searchCategory').value || null,
             page: currentPage,
             pageSize: parseInt(document.getElementById('pageSize').value)

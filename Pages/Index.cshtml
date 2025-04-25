@@ -208,6 +208,13 @@
                 <option value="sports">运动用品</option>
                 <option value="others">其它物品</option>
             </select>
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <div>
+                    <input type="checkbox" id="onlyMyItems" name="onlyMyItems">
+                    <label for="onlyMyItems">仅查看我登记的物品</label>
+                </div>
+            }
             <button type="submit">搜索</button>
         </form>
     </section>

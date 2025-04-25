@@ -151,6 +151,12 @@ namespace LostAndFoundWebApp.Services.Mysql
                 parameters.Add(new MySqlParameter("@IsValid", searchParams.IsValid.Value));
             }
 
+            if (searchParams.OnlyMyItems.HasValue && searchParams.OnlyMyItems.Value && searchParams.UserID.HasValue)
+            {
+                whereClause.Append(" AND UserID = @UserId");
+                parameters.Add(new MySqlParameter("@UserId", searchParams.UserID.Value));
+            }
+
             if (!string.IsNullOrWhiteSpace(searchParams.Category))
             {
                 whereClause.Append(" AND Category = @Category");
