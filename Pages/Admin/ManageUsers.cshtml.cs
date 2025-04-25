@@ -14,7 +14,7 @@ namespace LostAndFoundWebApp.Pages.Admin
             Users = DatabaseOperate.GetAllUsers();
         }
 
-        public IActionResult OnPostToggle([FromBody] ToggleRequest data)
+        public IActionResult OnPostToggleState([FromBody] ToggleRequest data)
         {
             if (data == null || data.UserId == null)
             {
@@ -33,6 +33,38 @@ namespace LostAndFoundWebApp.Pages.Admin
             }
 
             return BadRequest("用户不存在");
+        }
+
+        public IActionResult OnPostToggleRole([FromBody] ToggleRequest data)
+        {
+            if (data == null || data.UserId == null)
+            {
+                return BadRequest("无效的请求数据");
+            }
+
+            int userId = data.UserId.Value;
+            var user = DatabaseOperate.GetUserById(userId);
+            if (user != null)
+            {
+                if(user.Role == UserMetadata.Role.User)
+                {
+                    user.Role = UserMetadata.Role.Admin;
+                }
+                else
+                {
+                    user.Role = UserMetadata.Role.User;
+                }
+                DatabaseOperate.UpdateUser(user);
+
+                return new JsonResult(new { role = user.Role });
+            }
+
+            return BadRequest("用户不存在");
+        }
+
+        public class ToggleStateRequest
+        {
+            public int? UserId { get; set; }
         }
 
         public class ToggleRequest
