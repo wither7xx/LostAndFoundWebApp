@@ -669,15 +669,15 @@ namespace LostAndFoundWebApp.Services.Mysql
         }
 
         // 获取个人的所有认领记录
-        public static List<Claim> GetClaimsUesr(int UesrId)
+        public static List<Claim> GetClaimsUser(int UserId)
         {
             var claims = new List<Claim>();
-            const string sql = "SELECT * FROM Claims WHERE UesrId = @UesrId";
+            const string sql = "SELECT * FROM Claims WHERE UserId = @UserId";
 
             using (var conn = new MySqlConnection(connectionString))
             using (var cmd = new MySqlCommand(sql, conn))
             {
-                cmd.Parameters.AddWithValue("@UesrId", UesrId);
+                cmd.Parameters.AddWithValue("@UserId", UserId);
 
                 try
                 {
