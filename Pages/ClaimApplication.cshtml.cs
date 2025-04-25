@@ -76,7 +76,6 @@ namespace LostAndFoundWebApp.Pages
             }
 
             Claim.ProofDocPath = $"/uploads/claims/{fileName}";
-            Console.WriteLine(Claim.ProofDocPath);
 
             // 设置用户ID（确保已授权）
             Claim.UserId = userID;

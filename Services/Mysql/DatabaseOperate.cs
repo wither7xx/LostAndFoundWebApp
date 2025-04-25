@@ -258,7 +258,9 @@ namespace LostAndFoundWebApp.Services.Mysql
                                 Status = reader["Status"] != DBNull.Value ? (reader["Status"].ToString() ?? ItemMetadata.Status.DefaultStatus) : ItemMetadata.Status.DefaultStatus,
                                 Category = reader["Category"] != DBNull.Value ? (reader["Category"].ToString() ?? ItemMetadata.Category.DefaultCategory) : ItemMetadata.Category.DefaultCategory,
                                 UserId = reader["UserId"] != DBNull.Value ? Convert.ToInt32(reader["UserId"]) : -1,
-                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false
+                                IsValid = reader["IsValid"] != DBNull.Value ? Convert.ToBoolean(reader["IsValid"]) : false,
+                                Images = DatabaseOperate.GetImagesByItem(ItemId),
+                                Claims = DatabaseOperate.GetClaimsByItem(ItemId)
                             };
 
                         }
