@@ -3,7 +3,52 @@
 @{
     ViewData["Title"] = "物品管理";
 }
+<style>
+/* 主容器优化 */
+.laf_container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+/* 表格深度美化 */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 1.5rem 0;
+    background: white;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    border-radius: 8px;
+    overflow: hidden;
+}
 
+.table th {
+    background: #2c3e50;
+    color: white;
+    padding: 1rem;
+    font-weight: 600;
+    text-align: left;
+}
+
+.table td {
+    padding: 1rem;
+    border-bottom: 1px solid #ecf0f1;
+    color: #34495e;
+}
+
+/* 斑马纹效果 */
+.table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+h1 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 2px solid #3498db;
+    display: inline-block;
+}
+</style>
+<div class="laf_container">
 <h1>物品管理</h1>
 <form method="post">
     @Html.AntiForgeryToken()
@@ -58,7 +103,7 @@
         }
     </tbody>
 </table>
-
+</div>
 @section Scripts {
     <script>
         document.addEventListener('DOMContentLoaded', () => {
