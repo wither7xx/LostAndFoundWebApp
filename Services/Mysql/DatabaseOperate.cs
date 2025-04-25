@@ -667,6 +667,46 @@ namespace LostAndFoundWebApp.Services.Mysql
                 }
             }
         }
+
+        // 获取个人的所有认领记录
+        public static List<Claim> GetClaimsUesr(int UesrId)
+        {
+            var claims = new List<Claim>();
+            const string sql = "SELECT * FROM Claims WHERE UesrId = @UesrId";
+
+            using (var conn = new MySqlConnection(connectionString))
+            using (var cmd = new MySqlCommand(sql, conn))
+            {
+                cmd.Parameters.AddWithValue("@UesrId", UesrId);
+
+                try
+                {
+                    conn.Open();
+                    using (var reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            claims.Add(new Claim
+                            {
+                                ClaimId = Convert.ToInt32(reader["ClaimId"]),
+                                ClaimDescription = reader["ClaimDescription"].ToString() ?? string.Empty,
+                                ProofDocPath = reader["ProofDocPath"].ToString() ?? string.Empty,
+                                Status = reader["Status"].ToString() ?? ClaimMetadata.Status.DefaultStatus,
+                                CreateTime = Convert.ToDateTime(reader["CreateTime"]),
+                                ItemId = Convert.ToInt32(reader["ItemId"]),
+                                UserId = Convert.ToInt32(reader["UserId"])
+                            });
+                        }
+                        return claims;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"按用户id查询认领记录失败: {ex.Message}");
+                    return new List<Claim>();
+                }
+            }
+        }
         //创建新用户
         public static int CreateUser(User user)
         {
