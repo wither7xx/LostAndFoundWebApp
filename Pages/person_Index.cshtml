@@ -95,7 +95,9 @@
             <tr>
                 <th>申请ID</th>
                 <th>物品ID</th>
+                <th>创建时间</th>
                 <th>描述</th>
+                <th>证明材料</th>
                 <th>状态</th>
             </tr>
         </thead>
@@ -103,10 +105,23 @@
             @foreach (var claim in Model.Claims)
             {
                 <tr id="claimRow-@claim.ClaimId" class="claim-row" data-claim-id="@claim.ClaimId">
-                    <td>@claim.ClaimId</td>
-                    <td>@claim.ItemId</td>
-                    <td>@claim.ClaimDescription</td>
-                    <td id="claimStatus-@claim.ClaimId">
+                    <td valign="middle">@claim.ClaimId</td>
+                    <td valign="middle">@claim.ItemId</td>
+				    <td valign="middle">@claim.CreateTime</td>
+                    <td valign="middle">@claim.ClaimDescription</td>
+                    <td valign="middle">
+					    @if (!string.IsNullOrEmpty(claim.ProofDocPath))
+					    {
+						    <a href="@Url.Content($"~/uploads/claims/{System.IO.Path.GetFileName(claim.ProofDocPath)}")" target="_blank">
+							    查看文件
+						    </a>
+					    }
+					    else
+					    {
+						    <span>无</span>
+					    }
+				    </td>
+                    <td id="claimStatus-@claim.ClaimId" valign="middle">
                         @if (claim.Status == LostAndFoundWebApp.Models.ClaimMetadata.Status.Approved)
                         {
                             @("已通过")
