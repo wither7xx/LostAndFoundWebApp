@@ -58,6 +58,11 @@
 	</ul>
 </li>
 						@* } *@
+						<li class="nav-item">
+							<a class="nav-link @(ViewContext.RouteData.Values["page"]?.ToString() == "/person_index" ? "nav-link-active" : "")" asp-area="" asp-page="/person_index">
+								<img src="/images/claim.png" alt="Claim Icon" width="24" height="24">我的信息
+							</a>
+						</li>
 					</ul>
 					<ul class="navbar-nav">
 						@if (User.Identity?.IsAuthenticated ?? false)
