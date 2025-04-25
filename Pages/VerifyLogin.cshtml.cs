@@ -59,11 +59,6 @@ namespace LostAndFoundWebApp.Pages
                     var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
                     await HttpContext.SignInAsync(CookieAuthenticationDefaults.AuthenticationScheme, new ClaimsPrincipal(claimsIdentity));
 
-                    if (user.Role == UserMetadata.Role.Admin)
-                    {
-                        return RedirectToPage("/Admin/Index");
-                    }
-
                     return RedirectToPage("/Index");
                 }
             }
