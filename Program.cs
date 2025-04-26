@@ -2,6 +2,7 @@ using LostAndFoundWebApp.Models;
 using LostAndFoundWebApp.Services.Email;
 using LostAndFoundWebApp.Services.Mysql;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.FileProviders;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -48,5 +49,31 @@ app.MapRazorPages()
 
 app.UseSession();
 app.UseAuthentication();
+
+app.UseStaticFiles();
+var uploadsImagesPath = Path.Combine(app.Environment.WebRootPath, "uploads", "images");
+var uploadsClaimsPath = Path.Combine(app.Environment.WebRootPath, "uploads", "claims");
+
+if (!Directory.Exists(uploadsImagesPath))
+{
+    Directory.CreateDirectory(uploadsImagesPath);
+}
+
+if (!Directory.Exists(uploadsClaimsPath))
+{
+    Directory.CreateDirectory(uploadsClaimsPath);
+}
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsImagesPath),
+    RequestPath = "/uploads/images"
+});
+
+app.UseStaticFiles(new StaticFileOptions
+{
+    FileProvider = new PhysicalFileProvider(uploadsClaimsPath),
+    RequestPath = "/uploads/claims"
+});
 
 app.Run();
